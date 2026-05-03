@@ -1,0 +1,14 @@
+{
+  "extensions": {
+    "recommendations": [
+      "Angular.ng-template",
+      "ms-vscode.vscode-typescript-tslint-plugin"
+    ]
+  },
+  "settings": {
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.tslint": true
+    }
+  }
+}
