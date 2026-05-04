@@ -1,0 +1,14 @@
+<header>
+  <nav class="navbar">
+    <div class="container">
+      <a routerLink="/home" class="brand">
+        <span class="logo">🚗</span>
+        <span class="brand-text">AutoMatch</span>
+      </a>
+      <ul class="nav-links">
+        <li><a [routerLink]="['/home']" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a></li>
+        <li><a [routerLink]="['/matches']" routerLinkActive="active">Meus matches</a></li>
+      </ul>
+    </div>
+  </nav>
+</header>
