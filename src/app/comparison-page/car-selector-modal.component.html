@@ -1,22 +1,33 @@
-<div class="modal-backdrop" (click)="onClose()">
-  <div class="modal-panel" (click)="$event.stopPropagation()">
+<div class="modal-backdrop" (click)="onClose()" role="presentation">
+  <div class="modal-panel" (click)="$event.stopPropagation()" role="dialog" aria-modal="true" [attr.aria-label]="title">
     <div class="modal-header">
       <div>
         <p class="modal-eyebrow">Selecionar veículo</p>
         <h3>{{ title }}</h3>
       </div>
-      <button type="button" class="close-button" (click)="onClose()" aria-label="Fechar seleção">×</button>
+      <button 
+        type="button" 
+        class="close-button" 
+        (click)="onClose()" 
+        aria-label="Fechar seleção de veículo"
+        title="Fechar (Esc)"
+      >
+        ×
+      </button>
     </div>
 
-    <div class="modal-grid">
+    <div class="modal-grid" role="grid">
       <button
         type="button"
-        *ngFor="let car of cars"
+        *ngFor="let car of cars; trackBy: trackByCarId"
         class="car-option"
         [class.is-selected]="car.id === selectedCarId"
         (click)="onSelectCar(car.id)"
+        role="gridcell"
+        [attr.aria-selected]="car.id === selectedCarId"
+        [attr.aria-label]="car.name + ', ' + car.year + ', ' + formatPrice(car.price)"
       >
-        <img [src]="car.images.main" [alt]="car.name" />
+        <img [src]="car.images.main" [alt]="car.name + ', ' + car.year" loading="lazy" />
         <div class="car-copy">
           <strong>{{ car.name }}</strong>
           <span>{{ car.year }}</span>

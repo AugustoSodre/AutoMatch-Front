@@ -18,24 +18,44 @@
     <section class="utility-bar" [formGroup]="dashboardForm" aria-label="Ferramentas do dashboard">
       <label class="utility-field search-field">
         <span>Buscar</span>
-        <input type="search" formControlName="search" placeholder="Filtrar por nome ou ano..." />
+        <div class="search-input-wrap">
+          <span class="search-icon" aria-hidden="true">🔎</span>
+          <input
+            type="search"
+            formControlName="search"
+            placeholder="Filtrar por nome ou ano..."
+            aria-label="Filtrar por nome ou ano"
+          />
+        </div>
       </label>
 
       <label class="utility-field sort-field">
-        <span>Sort By</span>
-        <select formControlName="sort">
-          <option value="savedAtDesc">Date Saved</option>
-          <option value="matchPctDesc">Match Percentage</option>
-          <option value="priceDesc">Price: High to Low</option>
+        <span>Ordenar</span>
+        <select formControlName="sort" aria-label="Ordenar resultados">
+          <option value="savedAtDesc">Mais recentes</option>
+          <option value="matchPctDesc">Maior compatibilidade</option>
+          <option value="priceDesc">Preço: maior → menor</option>
         </select>
       </label>
 
       <div class="view-toggle" role="group" aria-label="Alternar visualização">
-        <button type="button" [class.is-active]="viewControl.value === 'grid'" (click)="setViewMode('grid')">
-          Grid View
+        <button
+          type="button"
+          [class.is-active]="viewControl.value === 'grid'"
+          (click)="setViewMode('grid')"
+          [attr.aria-pressed]="viewControl.value === 'grid'"
+          title="Visualizar em grade"
+        >
+          ☐ Grid
         </button>
-        <button type="button" [class.is-active]="viewControl.value === 'list'" (click)="setViewMode('list')">
-          List View
+        <button
+          type="button"
+          [class.is-active]="viewControl.value === 'list'"
+          (click)="setViewMode('list')"
+          [attr.aria-pressed]="viewControl.value === 'list'"
+          title="Visualizar em lista"
+        >
+          ☰ Lista
         </button>
       </div>
     </section>

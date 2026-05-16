@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { CommonModule, NgFor } from '@angular/common';
 
 import { Car } from '../car.interface';
@@ -12,12 +12,17 @@ import { Car } from '../car.interface';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CarSelectorModalComponent {
-  @Input() title = '';
+  @Input() title: string = '';
   @Input() cars: ReadonlyArray<Car> = [];
   @Input() selectedCarId: string | null = null;
 
   @Output() close = new EventEmitter<void>();
   @Output() selectCar = new EventEmitter<string>();
+
+  @HostListener('document:keydown.escape')
+  public onEscapeKey(): void {
+    this.onClose();
+  }
 
   public onClose(): void {
     this.close.emit();
@@ -25,9 +30,19 @@ export class CarSelectorModalComponent {
 
   public onSelectCar(carId: string): void {
     this.selectCar.emit(carId);
+    this.onClose();
   }
 
   public formatPrice(price: number): string {
-    return `R$ ${price.toLocaleString('pt-BR')}`;
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(price);
+  }
+
+  public trackByCarId(_index: number, car: Car): string {
+    return car.id;
   }
 }

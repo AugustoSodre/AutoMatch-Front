@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 
@@ -88,7 +88,8 @@ export class NewMatchWizardComponent implements OnInit {
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly mockImageService: MockImageService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly changeDetectorRef: ChangeDetectorRef
   ) {
     const categoryImages = this.mockImageService.getCategoryImages();
 
@@ -355,11 +356,13 @@ export class NewMatchWizardComponent implements OnInit {
     };
 
     this.isCalculating = true;
+    this.changeDetectorRef.markForCheck();
     console.log('New match wizard payload', payload);
 
+    // Simulated API call with celebratory timing
     window.setTimeout(() => {
       void this.router.navigate(['/meus-matches']);
-    }, 1800);
+    }, 2400);
   }
 
   private markCurrentStepTouched(): void {
@@ -392,5 +395,21 @@ export class NewMatchWizardComponent implements OnInit {
     const nextMax = Number(rawValue);
     const safeMax = Math.max(Math.min(nextMax, this.budgetCeiling), this.budgetMin);
     this.budgetGroup.get('max')?.setValue(safeMax);
+  }
+
+  public trackByStep(index: number, step: WizardStep): number {
+    return step.number;
+  }
+
+  public trackByAttribute(index: number, attribute: AttributeCard): string {
+    return attribute.id;
+  }
+
+  public trackByCategory(index: number, category: CategoryCard): string {
+    return category.id;
+  }
+
+  public trackByPriority(index: number, priorityId: string): string {
+    return priorityId;
   }
 }

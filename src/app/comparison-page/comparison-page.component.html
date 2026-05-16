@@ -8,7 +8,7 @@
 
     <ng-container *ngIf="selectedCars$ | async as selectedCars">
       <ng-container *ngIf="cars$ | async as catalog">
-        <section class="compare-hero" aria-label="Comparação de veículos">
+        <section class="compare-hero" role="region" aria-label="Seleção de veículos para comparação">
           <app-vehicle-compare-card
             [car]="selectedCars[0]"
             slotLabel="Veículo A"
@@ -16,7 +16,7 @@
           ></app-vehicle-compare-card>
 
           <div class="vs-lane" aria-hidden="true">
-            <span class="vs-badge">VS</span>
+            <span class="vs-badge" role="presentation">VS</span>
           </div>
 
           <app-vehicle-compare-card
@@ -26,25 +26,43 @@
           ></app-vehicle-compare-card>
         </section>
 
-        <section class="spec-grid" aria-label="Tabela comparativa">
-          <div class="spec-head">
-            <span></span>
-            <span>Atributo</span>
-            <span>{{ selectedCars[0]?.name ?? 'Veículo A' }}</span>
-            <span>{{ selectedCars[1]?.name ?? 'Veículo B' }}</span>
+        <section class="spec-grid" role="table" aria-label="Tabela comparativa de especificações" [attr.aria-describedby]="'comparison-desc'">
+          <div id="comparison-desc" class="sr-only">
+            Comparação de {{ selectedCars[0]?.name ?? 'Veículo A' }} e {{ selectedCars[1]?.name ?? 'Veículo B' }}. 
+            A cor laranja indica o veículo com melhor desempenho em cada categoria.
+          </div>
+
+          <div class="spec-head" role="row">
+            <span role="columnheader"></span>
+            <span role="columnheader">Atributo</span>
+            <span role="columnheader">{{ selectedCars[0]?.name ?? 'Veículo A' }}</span>
+            <span role="columnheader">{{ selectedCars[1]?.name ?? 'Veículo B' }}</span>
           </div>
 
           <div
             class="spec-row"
-            *ngFor="let row of buildRows(selectedCars[0], selectedCars[1]); let index = index"
+            *ngFor="let row of buildRows(selectedCars[0], selectedCars[1]); let index = index; trackBy: trackByIndex"
             [class.is-alt]="index % 2 === 1"
+            role="row"
           >
-            <span class="spec-icon">{{ row.spec.icon }}</span>
-            <span class="spec-label">{{ row.spec.label }}</span>
-            <span class="spec-value" [class.is-better]="row.leftBetter" [class.is-muted]="row.rightBetter">
+            <span class="spec-icon" role="presentation">{{ row.spec.icon }}</span>
+            <span class="spec-label" role="cell">{{ row.spec.label }}</span>
+            <span 
+              class="spec-value" 
+              [class.is-better]="row.leftBetter" 
+              [class.is-muted]="row.rightBetter"
+              role="cell"
+              [attr.aria-label]="row.spec.label + ' - ' + (selectedCars[0]?.name ?? 'Veículo A') + ': ' + row.leftValue + (row.leftBetter ? ' (melhor)' : '')"
+            >
               {{ row.leftValue }}
             </span>
-            <span class="spec-value" [class.is-better]="row.rightBetter" [class.is-muted]="row.leftBetter">
+            <span 
+              class="spec-value" 
+              [class.is-better]="row.rightBetter" 
+              [class.is-muted]="row.leftBetter"
+              role="cell"
+              [attr.aria-label]="row.spec.label + ' - ' + (selectedCars[1]?.name ?? 'Veículo B') + ': ' + row.rightValue + (row.rightBetter ? ' (melhor)' : '')"
+            >
               {{ row.rightValue }}
             </span>
           </div>

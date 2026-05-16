@@ -1,5 +1,5 @@
 import { AsyncPipe, CommonModule, NgFor, NgIf } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, OnInit } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
@@ -134,6 +134,13 @@ export class ComparisonPageComponent implements OnInit {
     });
   }
 
+  @HostListener('document:keydown.escape')
+  public onEscapeKey(): void {
+    if (this.activeSlot !== null) {
+      this.closeSelector();
+    }
+  }
+
   public openSelector(slot: 'left' | 'right'): void {
     this.activeSlot = slot;
   }
@@ -145,9 +152,7 @@ export class ComparisonPageComponent implements OnInit {
   public selectCar(carId: string): void {
     if (this.activeSlot === 'left') {
       this.comparisonService.setSelectedCar(0, carId);
-    }
-
-    if (this.activeSlot === 'right') {
+    } else if (this.activeSlot === 'right') {
       this.comparisonService.setSelectedCar(1, carId);
     }
 
@@ -242,5 +247,9 @@ export class ComparisonPageComponent implements OnInit {
     }
 
     return `R$ ${parsed.toLocaleString('pt-BR')}`;
+  }
+
+  public trackByIndex(index: number): number {
+    return index;
   }
 }

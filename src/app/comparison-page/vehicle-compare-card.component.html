@@ -1,6 +1,6 @@
-<article class="vehicle-card" *ngIf="car; else emptyState">
+<article class="vehicle-card" *ngIf="car; else emptyState" role="region" [attr.aria-label]="'Veículo: ' + car.name + ', ' + car.year">
   <div class="vehicle-image">
-    <img [src]="car.images.main" [alt]="car.name" />
+    <img [src]="car.images.main" [alt]="car.name + ', ' + car.year" loading="lazy" />
   </div>
 
   <div class="vehicle-body">
@@ -12,18 +12,28 @@
 
     <div class="vehicle-price">{{ formatPrice(car.price) }}</div>
 
-    <button type="button" class="change-button" (click)="onChangeVehicle()">
+    <button 
+      type="button" 
+      class="change-button" 
+      (click)="onChangeVehicle()"
+      [attr.aria-label]="'Trocar ' + slotLabel"
+    >
       Trocar veículo
     </button>
   </div>
 </article>
 
 <ng-template #emptyState>
-  <article class="vehicle-card empty">
+  <article class="vehicle-card empty" role="region" aria-label="Seletor de veículo vazio">
     <div class="vehicle-body">
       <p class="slot-label">{{ slotLabel }}</p>
       <h2>Selecione um veículo</h2>
-      <button type="button" class="change-button" (click)="onChangeVehicle()">
+      <button 
+        type="button" 
+        class="change-button" 
+        (click)="onChangeVehicle()"
+        [attr.aria-label]="'Escolher ' + slotLabel"
+      >
         Escolher veículo
       </button>
     </div>

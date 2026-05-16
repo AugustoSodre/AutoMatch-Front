@@ -2,7 +2,7 @@ import { AsyncPipe, CommonModule, NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, combineLatest, map, startWith } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, map, startWith, debounceTime, distinctUntilChanged } from 'rxjs';
 
 import { CarService } from '../car.service';
 import { AccountService } from '../account.service';
@@ -62,7 +62,7 @@ export class SavedMatchesDashboardComponent {
 
   public readonly dashboardState$: Observable<SavedMatchesDashboardState> = combineLatest([
     this.savedMatches$,
-    this.searchControl.valueChanges.pipe(startWith(this.searchControl.value)),
+    this.searchControl.valueChanges.pipe(startWith(this.searchControl.value), debounceTime(180), distinctUntilChanged()),
     this.sortControl.valueChanges.pipe(startWith(this.sortControl.value)),
     this.viewControl.valueChanges.pipe(startWith(this.viewControl.value))
   ]).pipe(

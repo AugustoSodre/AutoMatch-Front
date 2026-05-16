@@ -1,6 +1,6 @@
 .comparison-page {
   min-height: calc(100vh - 80px);
-  background: #0f172a;
+  background: linear-gradient(135deg, #0f172a 0%, #111827 50%, #0f172a 100%);
   padding: 2rem 1.5rem 3rem;
 }
 
@@ -8,13 +8,36 @@
   max-width: 1400px;
   margin: 0 auto;
   display: grid;
-  gap: 1.5rem;
+  gap: 2.5rem;
 }
 
 .comparison-intro {
   display: grid;
   gap: 0.35rem;
   padding: 0 0.25rem;
+  animation: slideDown 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .eyebrow {
@@ -23,6 +46,7 @@
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-size: 0.78rem;
+  font-weight: 600;
 }
 
 .comparison-intro h1 {
@@ -30,19 +54,23 @@
   color: #ffffff;
   font-size: clamp(2rem, 3vw, 3rem);
   font-weight: 800;
+  letter-spacing: -1px;
+  line-height: 1.1;
 }
 
 .comparison-intro p {
   margin: 0;
   color: rgba(255, 255, 255, 0.72);
   line-height: 1.6;
+  font-size: 1rem;
 }
 
 .compare-hero {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 120px minmax(0, 1fr);
-  gap: 1rem;
-  align-items: stretch;
+  gap: 2rem;
+  align-items: center;
+  animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.08s backwards;
 }
 
 .vs-lane {
@@ -60,79 +88,115 @@
   left: 50%;
   width: 2px;
   transform: translateX(-50%);
-  background: linear-gradient(to bottom, rgba(148, 163, 184, 0), rgba(148, 163, 184, 0.42), rgba(148, 163, 184, 0));
+  background: linear-gradient(to bottom, 
+    rgba(148, 163, 184, 0), 
+    rgba(148, 163, 184, 0.42), 
+    rgba(148, 163, 184, 0));
+  transition: background 0.4s ease;
 }
 
 .vs-badge {
   position: relative;
   z-index: 1;
-  width: 72px;
-  height: 72px;
+  width: 68px;
+  height: 68px;
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle at top, rgba(243, 156, 18, 0.28), rgba(15, 23, 42, 0.98));
+  background: linear-gradient(180deg, rgba(12,16,23,0.95), rgba(20,26,38,0.98));
   color: #ffffff;
-  font-size: 1.2rem;
+  font-size: 1.05rem;
   font-weight: 900;
   letter-spacing: 0.08em;
-  border: 1px solid rgba(243, 156, 18, 0.4);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+  border: 2px solid rgba(243, 156, 18, 0.28);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45), 0 0 30px rgba(243,156,18,0.06);
+  animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35), 
+                0 0 20px rgba(243, 156, 18, 0.1);
+  }
+  50% {
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35), 
+                0 0 30px rgba(243, 156, 18, 0.2);
+  }
 }
 
 .spec-grid {
   display: grid;
   gap: 0;
-  background: rgba(17, 24, 39, 0.94);
-  border: 1px solid rgba(75, 85, 99, 0.5);
-  border-radius: 22px;
+  background: rgba(12, 16, 23, 0.96);
+  border: 1px solid rgba(75, 85, 99, 0.42);
+  border-radius: 26px;
   overflow: hidden;
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.24);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.36);
+  animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.18s backwards;
 }
 
 .spec-head,
 .spec-row {
   display: grid;
-  grid-template-columns: 44px minmax(180px, 1.2fr) repeat(2, minmax(0, 1fr));
-  gap: 1rem;
+  grid-template-columns: 52px minmax(200px, 1.4fr) repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
   align-items: center;
-  padding: 1rem 1.15rem;
+  padding: 1.15rem 1.6rem;
 }
 
 .spec-head {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.02);
   color: rgba(255, 255, 255, 0.72);
-  font-size: 0.82rem;
+  font-size: 0.88rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+  font-weight: 700;
+  border-bottom: 1px solid rgba(75, 85, 99, 0.28);
 }
 
 .spec-row {
-  background: rgba(255, 255, 255, 0.015);
-  border-top: 1px solid rgba(75, 85, 99, 0.22);
+  background: rgba(255, 255, 255, 0.012);
+  border-top: 1px solid rgba(75, 85, 99, 0.18);
+  transition: background 0.18s ease, transform 0.18s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.03);
+    transform: translateY(-2px);
+  }
 }
 
 .spec-row.is-alt {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.02);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.035);
+  }
 }
 
 .spec-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.04);
   color: var(--primary-orange);
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 800;
+  transition: background 0.18s ease, transform 0.18s ease;
+}
+
+.spec-row:hover .spec-icon {
+  background: rgba(243, 156, 18, 0.1);
+  transform: scale(1.1);
 }
 
 .spec-label {
   color: #ffffff;
   font-weight: 700;
+  letter-spacing: -0.3px;
 }
 
 .spec-value {
@@ -144,30 +208,49 @@
 .spec-value.is-better {
   color: var(--primary-orange);
   font-weight: 800;
+  transform: scale(1.05);
+  letter-spacing: -0.3px;
 }
 
 .spec-value.is-muted {
   color: rgba(255, 255, 255, 0.52);
+  opacity: 0.8;
 }
 
 @media (max-width: 1024px) {
   .compare-hero {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 
   .vs-lane {
     min-height: 96px;
+    transform: rotate(90deg);
   }
 
   .vs-lane::before {
     left: 50%;
     right: 50%;
+    top: 50%;
+    bottom: 50%;
+    width: auto;
+    height: 2px;
+  }
+
+  .spec-head,
+  .spec-row {
+    gap: 0.85rem;
+    padding: 0.95rem;
   }
 }
 
 @media (max-width: 780px) {
   .comparison-page {
-    padding: 1rem;
+    padding: 1.5rem 1rem 2rem;
+  }
+
+  .comparison-shell {
+    gap: 1.5rem;
   }
 
   .spec-head,
@@ -181,9 +264,25 @@
   .spec-head span:nth-child(4) {
     font-size: 0.72rem;
   }
+
+  .comparison-intro h1 {
+    font-size: clamp(1.75rem, 2.5vw, 2.5rem);
+  }
 }
 
 @media (max-width: 640px) {
+  .comparison-page {
+    padding: 1rem 0.75rem 1.5rem;
+  }
+
+  .comparison-intro {
+    padding: 0;
+  }
+
+  .comparison-intro h1 {
+    font-size: 1.5rem;
+  }
+
   .spec-head {
     display: none;
   }
@@ -194,14 +293,26 @@
       'icon label'
       'icon left'
       'icon right';
+    gap: 0.5rem;
+    padding: 0.75rem;
   }
 
-  .spec-icon { grid-area: icon; }
-  .spec-label { grid-area: label; }
-  .spec-row .spec-value:nth-child(3) { grid-area: left; }
-  .spec-row .spec-value:nth-child(4) { grid-area: right; }
-
+  .spec-icon { 
+    grid-area: icon; 
+  }
+  
+  .spec-label { 
+    grid-area: label; 
+  }
+  
+  .spec-value:nth-child(3) { 
+    grid-area: left; 
+  }
+  
+  .spec-value:nth-child(4) { 
+    grid-area: right; 
+  }
+}
   .spec-value {
     padding-left: 2.4rem;
   }
-}

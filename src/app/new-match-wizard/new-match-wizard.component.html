@@ -14,14 +14,16 @@
 
         <div class="progress-steps">
           <button
-            *ngFor="let step of wizardSteps"
+            *ngFor="let step of wizardSteps; trackBy: trackByStep"
             type="button"
             class="progress-step"
             [class.is-active]="step.number === currentStep"
             [class.is-complete]="step.number < currentStep"
             (click)="goToStep(step.number)"
+            [attr.aria-current]="step.number === currentStep ? 'step' : undefined"
+            [attr.aria-label]="'Passo ' + step.number + ': ' + step.title + ' - ' + step.description"
           >
-            <span class="step-number">{{ step.number }}</span>
+            <span class="step-number" aria-hidden="true">{{ step.number }}</span>
             <span class="step-copy">
               <strong>{{ step.title }}</strong>
               <small>{{ step.description }}</small>
@@ -108,13 +110,15 @@
         <div class="attributes-column">
           <div class="attribute-grid">
             <button
-              *ngFor="let attribute of attributeCards"
+              *ngFor="let attribute of attributeCards; trackBy: trackByAttribute"
               type="button"
               class="attribute-card"
               [class.is-selected]="isPrioritySelected(attribute.id)"
               (click)="togglePriority(attribute.id)"
+              [attr.aria-pressed]="isPrioritySelected(attribute.id)"
+              [attr.aria-label]="attribute.label + ' - ' + attribute.description"
             >
-              <span class="attribute-icon">{{ attribute.icon }}</span>
+              <span class="attribute-icon" aria-hidden="true">{{ attribute.icon }}</span>
               <strong>{{ attribute.label }}</strong>
               <small>{{ attribute.description }}</small>
             </button>
@@ -131,22 +135,25 @@
               <span class="priority-counter">{{ selectedPriorities.length }} itens</span>
             </div>
 
-            <ul class="priority-list" *ngIf="selectedPriorities.length > 0; else emptyPriorities">
+            <ul class="priority-list" *ngIf="selectedPriorities.length > 0; else emptyPriorities" role="list">
               <li
-                *ngFor="let attributeId of selectedPriorities; let index = index"
+                *ngFor="let attributeId of selectedPriorities; let index = index; trackBy: trackByPriority"
+                role="listitem"
                 draggable="true"
                 (dragstart)="onPriorityDragStart(index)"
                 (dragover)="onPriorityDragOver($event, index)"
                 (drop)="onPriorityDrop()"
                 (dragend)="onPriorityDragEnd()"
                 [class.is-dragging]="draggedPriorityIndex === index"
+                [attr.aria-dropeffect]="'move'"
+                [attr.aria-label]="'Prioridade ' + (index + 1) + ': ' + getAttributeLabel(attributeId) + ' - ' + getPriorityHint(index)"
               >
-                <span class="priority-rank">{{ index + 1 }}</span>
+                <span class="priority-rank" aria-hidden="true">{{ index + 1 }}</span>
                 <div class="priority-copy">
                   <strong>{{ getAttributeLabel(attributeId) }}</strong>
                   <small>{{ getPriorityHint(index) }}</small>
                 </div>
-                <span class="drag-handle" aria-hidden="true">⠿</span>
+                <span class="drag-handle" aria-label="Arrastar para reordenar">⠿</span>
               </li>
             </ul>
 
@@ -167,21 +174,23 @@
           <p>Selecione múltiplas categorias visuais e conclua com seus must-haves para gerar o match.</p>
         </div>
 
-        <div class="category-grid">
+        <div class="category-grid" role="group" aria-label="Seleção de categorias">
           <button
-            *ngFor="let category of categoryCards"
+            *ngFor="let category of categoryCards; trackBy: trackByCategory"
             type="button"
             class="category-card"
             [class.is-selected]="isCategorySelected(category.id)"
             (click)="toggleCategory(category.id)"
+            [attr.aria-pressed]="isCategorySelected(category.id)"
+            [attr.aria-label]="category.label + ' - ' + category.description"
           >
-            <img [src]="category.imageUrl" [alt]="category.label" />
+            <img [src]="category.imageUrl" [alt]="category.label" loading="lazy" />
             <div class="category-overlay"></div>
             <div class="category-copy">
               <strong>{{ category.label }}</strong>
               <p>{{ category.description }}</p>
             </div>
-            <span class="category-check">✓</span>
+            <span class="category-check" aria-hidden="true">✓</span>
           </button>
         </div>
 
@@ -210,11 +219,16 @@
     </form>
   </section>
 
-  <div *ngIf="isCalculating" class="loading-overlay" role="status" aria-live="polite">
+  <div *ngIf="isCalculating" class="loading-overlay" role="status" aria-live="polite" aria-label="Carregando resultados">
     <div class="loading-card">
       <div class="spinner"></div>
-      <h3>AutoMatch is calculating your ideal matches...</h3>
-      <p>Estamos cruzando perfil, orçamento, prioridades e categorias para gerar sugestões mais precisas.</p>
+      <h3>AutoMatch está calculando seus matches...</h3>
+      <p>Cruzando perfil, orçamento, prioridades e categorias para gerar as melhores sugestões.</p>
+      <div class="progress-dots">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
     </div>
   </div>
 </main>
