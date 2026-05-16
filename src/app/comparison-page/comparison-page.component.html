@@ -1,0 +1,64 @@
+<main class="comparison-page">
+  <section class="comparison-shell">
+    <header class="comparison-intro">
+      <p class="eyebrow">Comparativo inteligente</p>
+      <h1>Compare veículos lado a lado</h1>
+      <p>Escolha dois modelos e veja qual vence em preço, desempenho, economia e custo de uso.</p>
+    </header>
+
+    <ng-container *ngIf="selectedCars$ | async as selectedCars">
+      <ng-container *ngIf="cars$ | async as catalog">
+        <section class="compare-hero" aria-label="Comparação de veículos">
+          <app-vehicle-compare-card
+            [car]="selectedCars[0]"
+            slotLabel="Veículo A"
+            (changeVehicle)="openSelector('left')"
+          ></app-vehicle-compare-card>
+
+          <div class="vs-lane" aria-hidden="true">
+            <span class="vs-badge">VS</span>
+          </div>
+
+          <app-vehicle-compare-card
+            [car]="selectedCars[1]"
+            slotLabel="Veículo B"
+            (changeVehicle)="openSelector('right')"
+          ></app-vehicle-compare-card>
+        </section>
+
+        <section class="spec-grid" aria-label="Tabela comparativa">
+          <div class="spec-head">
+            <span></span>
+            <span>Atributo</span>
+            <span>{{ selectedCars[0]?.name ?? 'Veículo A' }}</span>
+            <span>{{ selectedCars[1]?.name ?? 'Veículo B' }}</span>
+          </div>
+
+          <div
+            class="spec-row"
+            *ngFor="let row of buildRows(selectedCars[0], selectedCars[1]); let index = index"
+            [class.is-alt]="index % 2 === 1"
+          >
+            <span class="spec-icon">{{ row.spec.icon }}</span>
+            <span class="spec-label">{{ row.spec.label }}</span>
+            <span class="spec-value" [class.is-better]="row.leftBetter" [class.is-muted]="row.rightBetter">
+              {{ row.leftValue }}
+            </span>
+            <span class="spec-value" [class.is-better]="row.rightBetter" [class.is-muted]="row.leftBetter">
+              {{ row.rightValue }}
+            </span>
+          </div>
+        </section>
+
+        <app-car-selector-modal
+          *ngIf="activeSlot !== null"
+          [title]="activeSlot === 'left' ? 'Escolha o veículo A' : 'Escolha o veículo B'"
+          [cars]="catalog"
+          [selectedCarId]="activeSlot === 'left' ? selectedCars[0]?.id ?? null : selectedCars[1]?.id ?? null"
+          (close)="closeSelector()"
+          (selectCar)="selectCar($event)"
+        ></app-car-selector-modal>
+      </ng-container>
+    </ng-container>
+  </section>
+</main>

@@ -1,0 +1,75 @@
+<main class="account-hub-page">
+  <section class="account-hub-shell">
+    <aside class="account-nav">
+      <div class="profile-card">
+        <button type="button" class="avatar-button" aria-label="Upload profile photo">
+          <span class="avatar-placeholder">C</span>
+          <span class="upload-hint">Upload</span>
+        </button>
+        <div class="profile-meta">
+          <h2>Crystian</h2>
+          <p>@crystian</p>
+        </div>
+      </div>
+
+      <nav class="menu" aria-label="Menu da conta">
+        <a
+          *ngFor="let item of menuItems"
+          [routerLink]="item.route"
+          routerLinkActive="is-active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="menu-item"
+          [class.is-active]="item.active"
+        >
+          <span class="menu-icon" aria-hidden="true">{{ item.icon }}</span>
+          <span class="menu-label">{{ item.label }}</span>
+        </a>
+      </nav>
+    </aside>
+
+    <section class="account-content">
+      <header class="content-header">
+        <h1>Informações Pessoais</h1>
+        <p>Atualize seus dados de acesso e informações básicas da sua conta AutoMatch.</p>
+      </header>
+
+      <form class="account-form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+        <div class="form-grid two-column">
+          <label class="field">
+            <span>Nome</span>
+            <input type="text" formControlName="firstName" placeholder="Seu nome" />
+          </label>
+
+          <label class="field">
+            <span>Sobrenome</span>
+            <input type="text" formControlName="lastName" placeholder="Seu sobrenome" />
+          </label>
+        </div>
+
+        <div class="form-grid two-column">
+          <label class="field">
+            <span>Email</span>
+            <input type="email" formControlName="email" placeholder="you@exemplo.com" />
+          </label>
+
+          <label class="field">
+            <span>Username</span>
+            <input type="text" formControlName="username" placeholder="@seuusuario" />
+          </label>
+        </div>
+
+        <div class="form-grid single-column">
+          <label class="field">
+            <span>Localização / Estado</span>
+            <input type="text" formControlName="location" placeholder="Ex.: São Paulo, SP" />
+          </label>
+        </div>
+
+        <div class="form-actions">
+          <a routerLink="/home" class="cancel-link">Cancelar</a>
+          <button type="submit" class="save-button">Salvar Alterações</button>
+        </div>
+      </form>
+    </section>
+  </section>
+</main>

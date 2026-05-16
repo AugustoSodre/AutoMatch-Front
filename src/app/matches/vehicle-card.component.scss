@@ -1,0 +1,204 @@
+:host {
+  display: block;
+}
+
+.vehicle-card {
+  height: 100%;
+  overflow: hidden;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    linear-gradient(180deg, rgba(24, 29, 39, 0.98), rgba(13, 17, 24, 0.98)),
+    #111722;
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.3);
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.vehicle-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(243, 156, 18, 0.35);
+  box-shadow: 0 28px 60px rgba(0, 0, 0, 0.36);
+}
+
+.vehicle-card.is-selected {
+  border-color: rgba(243, 156, 18, 0.85);
+  box-shadow: 0 0 0 1px rgba(243, 156, 18, 0.35), 0 24px 50px rgba(0, 0, 0, 0.3);
+}
+
+.vehicle-card__media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+}
+
+.vehicle-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 280ms ease;
+}
+
+.vehicle-card:hover .vehicle-card__media img {
+  transform: scale(1.04);
+}
+
+.vehicle-card__badges {
+  position: absolute;
+  inset: 16px 16px auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.match-badge,
+.favorite-badge,
+.vehicle-card__year,
+.vehicle-card__category {
+  backdrop-filter: blur(14px);
+}
+
+.match-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 12px;
+  border-radius: 999px;
+  background: rgba(243, 156, 18, 0.92);
+  color: #111722;
+  font-size: 0.84rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.favorite-badge {
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(16, 22, 31, 0.75);
+  color: #ff6b7a;
+  font-size: 1.05rem;
+}
+
+.vehicle-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 20px;
+}
+
+.vehicle-card__heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.vehicle-card__eyebrow {
+  margin: 0 0 6px;
+  color: rgba(224, 231, 255, 0.64);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.vehicle-card__heading h3 {
+  margin: 0;
+  color: #fff;
+  font-size: 1.15rem;
+  line-height: 1.2;
+}
+
+.vehicle-card__year {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #f7fafc;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.vehicle-card__stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.vehicle-card__stats div {
+  padding: 12px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.vehicle-card__stats span {
+  color: rgba(224, 231, 255, 0.64);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.vehicle-card__stats strong {
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.vehicle-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.vehicle-card__category {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(247, 250, 252, 0.82);
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.compare-button {
+  min-width: 120px;
+  height: 42px;
+  border: 1px solid rgba(243, 156, 18, 0.55);
+  border-radius: 14px;
+  background: transparent;
+  color: #f8fafc;
+  font-weight: 800;
+  transition: background 180ms ease, color 180ms ease, border-color 180ms ease;
+}
+
+.compare-button:hover,
+.compare-button.is-selected {
+  background: #f39c12;
+  border-color: #f39c12;
+  color: #101722;
+}
+
+@media (max-width: 640px) {
+  .vehicle-card__stats {
+    grid-template-columns: 1fr;
+  }
+
+  .vehicle-card__footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .compare-button {
+    width: 100%;
+  }
+}

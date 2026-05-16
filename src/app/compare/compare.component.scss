@@ -1,0 +1,27 @@
+.compare-page {
+  min-height: calc(100vh - 80px);
+  background: var(--bg-dark-blue);
+  padding: 3rem 1.5rem;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.compare-card {
+  background: #1e293b;
+  border-radius: 20px;
+  padding: 2rem;
+  color: #ffffff;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+}
+
+.compare-card h1 {
+  margin: 0 0 0.75rem;
+}
+
+.compare-card p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.8);
+}

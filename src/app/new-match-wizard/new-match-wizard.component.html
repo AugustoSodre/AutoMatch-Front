@@ -1,0 +1,220 @@
+<main class="wizard-page">
+  <section class="wizard-shell">
+    <header class="wizard-hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Novo Match</p>
+        <h1>Encontre o carro ideal em poucos passos</h1>
+        <p>Um fluxo guiado, limpo e rápido para transformar preferências em um match automotivo de alta precisão.</p>
+      </div>
+
+      <div class="wizard-progress" aria-label="Progresso do wizard">
+        <div class="progress-track">
+          <span class="progress-fill" [style.width.%]="progressPercent"></span>
+        </div>
+
+        <div class="progress-steps">
+          <button
+            *ngFor="let step of wizardSteps"
+            type="button"
+            class="progress-step"
+            [class.is-active]="step.number === currentStep"
+            [class.is-complete]="step.number < currentStep"
+            (click)="goToStep(step.number)"
+          >
+            <span class="step-number">{{ step.number }}</span>
+            <span class="step-copy">
+              <strong>{{ step.title }}</strong>
+              <small>{{ step.description }}</small>
+            </span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <form class="wizard-form" [formGroup]="form" (ngSubmit)="handlePrimaryAction()" novalidate>
+      <section class="wizard-panel" *ngIf="currentStep === 1">
+        <div class="panel-copy">
+          <p class="panel-label">Passo 1</p>
+          <h2>Perfil &amp; orçamento</h2>
+          <p>Preencha seus dados e a faixa de preço para personalizar a busca com precisão.</p>
+        </div>
+
+        <div class="form-grid" formGroupName="profile">
+          <label class="field span-6">
+            <span>Nome completo</span>
+            <input type="text" formControlName="fullName" placeholder="Seu nome completo" />
+          </label>
+
+          <label class="field span-6">
+            <span>Email</span>
+            <input type="email" formControlName="email" placeholder="you@exemplo.com" />
+          </label>
+
+          <label class="field span-12">
+            <span>Estado</span>
+            <input type="text" formControlName="state" placeholder="Ex.: São Paulo, SP" />
+          </label>
+        </div>
+
+        <div class="budget-card" formGroupName="budget">
+          <div class="budget-head">
+            <div>
+              <p class="panel-label">Faixa de preço</p>
+              <h3>Selecione o intervalo ideal para o seu orçamento</h3>
+            </div>
+            <div class="budget-badges">
+              <span>{{ formatBudget(budgetMin) }}</span>
+              <span>{{ formatBudget(budgetMax) }}</span>
+            </div>
+          </div>
+
+          <div class="range-slider">
+            <div class="range-track" [style.background]="budgetTrackBackground"></div>
+
+            <input
+              #minBudget
+              type="range"
+              formControlName="min"
+              [min]="budgetFloor"
+              [max]="budgetCeiling"
+              [step]="budgetStep"
+              [value]="budgetMin"
+              (input)="onBudgetMinChange(minBudget.value)"
+              aria-label="Valor mínimo do orçamento"
+            />
+
+            <input
+              #maxBudget
+              type="range"
+              formControlName="max"
+              [min]="budgetFloor"
+              [max]="budgetCeiling"
+              [step]="budgetStep"
+              [value]="budgetMax"
+              (input)="onBudgetMaxChange(maxBudget.value)"
+              aria-label="Valor máximo do orçamento"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section class="wizard-panel two-column-layout" *ngIf="currentStep === 2">
+        <div class="panel-copy">
+          <p class="panel-label">Passo 2</p>
+          <h2>Prioridades &amp; atributos</h2>
+          <p>Escolha os atributos que mais importam para você e arraste para ordenar por prioridade.</p>
+        </div>
+
+        <div class="attributes-column">
+          <div class="attribute-grid">
+            <button
+              *ngFor="let attribute of attributeCards"
+              type="button"
+              class="attribute-card"
+              [class.is-selected]="isPrioritySelected(attribute.id)"
+              (click)="togglePriority(attribute.id)"
+            >
+              <span class="attribute-icon">{{ attribute.icon }}</span>
+              <strong>{{ attribute.label }}</strong>
+              <small>{{ attribute.description }}</small>
+            </button>
+          </div>
+        </div>
+
+        <div class="priority-column">
+          <div class="priority-card">
+            <div class="priority-head">
+              <div>
+                <p class="panel-label">Priority sort</p>
+                <h3>Arraste para definir o que é obrigatório</h3>
+              </div>
+              <span class="priority-counter">{{ selectedPriorities.length }} itens</span>
+            </div>
+
+            <ul class="priority-list" *ngIf="selectedPriorities.length > 0; else emptyPriorities">
+              <li
+                *ngFor="let attributeId of selectedPriorities; let index = index"
+                draggable="true"
+                (dragstart)="onPriorityDragStart(index)"
+                (dragover)="onPriorityDragOver($event, index)"
+                (drop)="onPriorityDrop()"
+                (dragend)="onPriorityDragEnd()"
+                [class.is-dragging]="draggedPriorityIndex === index"
+              >
+                <span class="priority-rank">{{ index + 1 }}</span>
+                <div class="priority-copy">
+                  <strong>{{ getAttributeLabel(attributeId) }}</strong>
+                  <small>{{ getPriorityHint(index) }}</small>
+                </div>
+                <span class="drag-handle" aria-hidden="true">⠿</span>
+              </li>
+            </ul>
+
+            <ng-template #emptyPriorities>
+              <div class="empty-state">
+                <strong>Sem prioridades ainda</strong>
+                <p>Clique nos cards ao lado para montar sua ordem de decisão.</p>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </section>
+
+      <section class="wizard-panel" *ngIf="currentStep === 3">
+        <div class="panel-copy">
+          <p class="panel-label">Passo 3</p>
+          <h2>Categoria &amp; must-haves</h2>
+          <p>Selecione múltiplas categorias visuais e conclua com seus must-haves para gerar o match.</p>
+        </div>
+
+        <div class="category-grid">
+          <button
+            *ngFor="let category of categoryCards"
+            type="button"
+            class="category-card"
+            [class.is-selected]="isCategorySelected(category.id)"
+            (click)="toggleCategory(category.id)"
+          >
+            <img [src]="category.imageUrl" [alt]="category.label" />
+            <div class="category-overlay"></div>
+            <div class="category-copy">
+              <strong>{{ category.label }}</strong>
+              <p>{{ category.description }}</p>
+            </div>
+            <span class="category-check">✓</span>
+          </button>
+        </div>
+
+        <div class="wizard-summary">
+          <div>
+            <p class="panel-label">Resumo</p>
+            <h3>{{ selectedCategories.length }} categoria(s) selecionada(s)</h3>
+          </div>
+          <div>
+            <p class="panel-label">Prioridades</p>
+            <h3>{{ selectedPriorities.length }} atributo(s) no ranking</h3>
+          </div>
+        </div>
+      </section>
+
+      <div class="wizard-actions">
+        <button type="button" class="ghost-button" (click)="goBack()" [disabled]="currentStep === 1 || isCalculating">
+          Voltar
+        </button>
+
+        <button type="submit" class="primary-button" [disabled]="isCalculating || !canProceed">
+          <span class="button-icon">{{ primaryActionIcon }}</span>
+          <span>{{ primaryActionLabel }}</span>
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <div *ngIf="isCalculating" class="loading-overlay" role="status" aria-live="polite">
+    <div class="loading-card">
+      <div class="spinner"></div>
+      <h3>AutoMatch is calculating your ideal matches...</h3>
+      <p>Estamos cruzando perfil, orçamento, prioridades e categorias para gerar sugestões mais precisas.</p>
+    </div>
+  </div>
+</main>

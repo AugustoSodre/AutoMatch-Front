@@ -1,0 +1,9 @@
+<div class="form-group">
+  <label *ngIf="label" class="label">{{ label }}</label>
+  <input [type]="type" [placeholder]="placeholder" [formControl]="control" class="input" />
+  <div class="error" *ngIf="control && control.invalid && (control.dirty || control.touched)">
+    <small *ngIf="control.errors?.['required']">Campo obrigatório.</small>
+    <small *ngIf="control.errors?.['email']">Email inválido.</small>
+    <small *ngIf="control.errors?.['minlength']">Valor muito curto.</small>
+  </div>
+</div>

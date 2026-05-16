@@ -1,0 +1,51 @@
+<article class="vehicle-card" [class.is-selected]="selectedForCompare">
+  <div class="vehicle-card__media">
+    <img [src]="match.car.images.main" [alt]="match.car.name" />
+
+    <div class="vehicle-card__badges">
+      <span class="match-badge">{{ match.matchPct }}% match</span>
+      <button type="button" class="favorite-badge" aria-label="Veículo salvo">
+        ❤
+      </button>
+    </div>
+  </div>
+
+  <div class="vehicle-card__body">
+    <div class="vehicle-card__heading">
+      <div>
+        <p class="vehicle-card__eyebrow">Salvo em {{ formatDate(match.savedAt) }}</p>
+        <h3>{{ match.car.name }}</h3>
+      </div>
+
+      <span class="vehicle-card__year">{{ match.car.year }}</span>
+    </div>
+
+    <div class="vehicle-card__stats">
+      <div>
+        <span>Preço</span>
+        <strong>{{ formatCurrency(match.car.price) }}</strong>
+      </div>
+      <div>
+        <span>Motor</span>
+        <strong>{{ match.car.specs.engine }}</strong>
+      </div>
+      <div>
+        <span>Consumo</span>
+        <strong>{{ match.car.specs.consumption }}</strong>
+      </div>
+    </div>
+
+    <div class="vehicle-card__footer">
+      <span class="vehicle-card__category">{{ match.car.category }}</span>
+
+      <button
+        type="button"
+        class="compare-button"
+        [class.is-selected]="selectedForCompare"
+        (click)="emitToggleCompare()"
+      >
+        {{ selectedForCompare ? 'Selecionado' : 'Comparar' }}
+      </button>
+    </div>
+  </div>
+</article>

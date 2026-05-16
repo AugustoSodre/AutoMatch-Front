@@ -1,0 +1,46 @@
+<main class="car-details-page">
+  <section class="hero container">
+    <div class="hero-text">
+      <span class="subtitle">{{ subtitle }}</span>
+      <h1>{{ title }}</h1>
+      <p class="price">{{ price }}</p>
+      <p class="meta">{{ metadata }}</p>
+    </div>
+
+    <div class="hero-gallery">
+      <img class="main-image" [src]="mainImage" [alt]="title" />
+      <div class="thumbnails">
+        <img *ngFor="let thumbnail of thumbnails" [src]="thumbnail.src" [alt]="thumbnail.alt" />
+      </div>
+    </div>
+  </section>
+
+  <section class="details container">
+    <div class="details-card">
+      <h2>Ficha Técnica</h2>
+      <div class="detail-list">
+        <div class="detail-item" *ngFor="let item of technicalDetails">
+          <span class="label">{{ item.label }}</span>
+          <span class="value">{{ item.value }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="details-card">
+      <h2>Custo</h2>
+      <div class="detail-list">
+        <div class="detail-item" *ngFor="let item of costDetails">
+          <span class="label">{{ item.label }}</span>
+          <span class="value">{{ item.value }}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="equipment container">
+    <h2>Equipamentos:</h2>
+    <div class="equipment-grid">
+      <p class="equipment-item" *ngFor="let item of equipmentItems">- {{ item }}</p>
+    </div>
+  </section>
+</main>

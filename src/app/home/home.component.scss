@@ -1,87 +1,190 @@
-.home-container {
-  min-height: calc(100vh - 80px);
-  display: flex;
-  flex-direction: column;
+.home-main {
+  display: block;
 }
 
 .hero {
-  flex: 1;
+  position: relative;
+  height: 60vh;
+  min-height: 420px;
+  display: flex;
+  align-items: flex-start;
+  color: white;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1800&q=60');
+  background-size: cover;
+  background-position: center right;
+  filter: brightness(0.9);
+  z-index: 0;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(17,24,39,0.85) 0%, rgba(17,24,39,0.55) 40%, rgba(17,24,39,0.15) 100%);
+  z-index: 1;
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 3rem;
+}
+
+.hero-left {
+  max-width: 720px;
+}
+
+.hero-left h1 {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.05;
+  margin: 2rem 0;
+}
+
+/* Value Proposition card overlapping hero */
+.value-prop {
+  position: relative;
+  transform: translateY(-50%);
+  margin-bottom: 3rem;
+  padding: 0 1rem;
+  z-index: 3;
+}
+
+.value-card {
+  background: white;
+  border-radius: 50px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #1e3a5f 0%, #2c4a73 100%);
-  color: white;
-  text-align: center;
-  padding: 4rem 2rem;
-
-  .hero-content {
-    max-width: 600px;
-
-    h1 {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-      font-weight: 700;
-    }
-
-    p {
-      font-size: 1.25rem;
-      margin-bottom: 2rem;
-      opacity: 0.9;
-    }
-
-    .btn {
-      padding: 0.75rem 2rem;
-      font-size: 1rem;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-
-      &.btn-primary {
-        background-color: white;
-        color: #1e3a5f;
-        font-weight: 600;
-
-        &:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        }
-      }
-    }
-  }
+  gap: 1rem;
+  padding: 24px 40px;
 }
 
-.features {
+.vp-item {
+  flex: 1 1 0;
+  text-align: center;
+  font-weight: 600;
+  color: #0f1724;
+}
+
+.vp-sep {
+  width: 8px;
+  height: 8px;
+  background: var(--primary-orange);
+  border-radius: 50%;
+}
+
+/* Categories */
+.categories {
+  padding: 0 1rem 2.5rem;
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 1rem;
+}
+
+.grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
-  padding: 4rem 2rem;
+  gap: 20px;
+}
+
+.cat-card {
+  min-height: 180px;
+  background-size: cover;
+  background-position: center;
+  background-color: #374151;
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  transition: transform 0.3s ease;
+}
+
+.cat-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(17, 24, 39, 0.9) 0%, rgba(17, 24, 39, 0) 100%);
+  z-index: 1;
+}
+
+.cat-card:hover {
+  transform: translateY(-5px);
+}
+
+.cat-footer {
+  width: 100%;
+  position: relative;
+  z-index: 2;
+  background: transparent;
+  color: white;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 600;
+}
+
+/* Services */
+.services {
+  padding: 2.5rem 1rem 4rem;
+  background: var(--bg-dark-blue);
+  color: #ffffff;
+}
+
+.services .container {
   max-width: 1200px;
   margin: 0 auto;
-  width: 100%;
+}
 
-  .feature {
-    background: #f8f9fa;
-    padding: 2rem;
-    border-radius: 8px;
-    text-align: center;
-    transition: all 0.3s ease;
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-top: 1rem;
+}
 
-    h3 {
-      color: #1e3a5f;
-      margin-bottom: 1rem;
-      font-size: 1.25rem;
-    }
+.service-col h3 {
+  margin: 0 0 0.5rem 0;
+  color: #ffffff;
+}
 
-    p {
-      color: #666;
-      line-height: 1.6;
-    }
+.service-card {
+  background: rgba(44,74,115,0.26);
+  padding: 2rem;
+  border-radius: 8px;
+  color: #e6eef8;
+}
 
-    &:hover {
-      background: white;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      transform: translateY(-4px);
-    }
-  }
+.section-title.light {
+  color: #f3f4f6;
+}
+
+.services .highlight {
+  color: #fbbf24;
+  font-weight: 700;
+}
+
+@media (max-width: 900px) {
+  .grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+  .services-grid { grid-template-columns: 1fr; }
+  .hero-left h1 { font-size: 1.75rem; }
+}
+
+@media (max-width: 480px) {
+  .grid { grid-template-columns: 1fr; }
+  .value-card { flex-direction: column; gap: 0.5rem; }
+  .vp-sep { display: none; }
 }

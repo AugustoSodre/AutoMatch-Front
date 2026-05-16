@@ -1,0 +1,119 @@
+.profile-page {
+  min-height: calc(100vh - 80px);
+  background: var(--bg-dark-blue);
+  padding: 3rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-panel {
+  width: 100%;
+  max-width: 760px;
+  background: #1e293b;
+  border: 1px solid #374151;
+  border-radius: 12px;
+  padding: 2.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.profile-panel h1 {
+  margin: 0 0 2rem;
+  text-align: center;
+  color: #ffffff;
+  font-size: clamp(2rem, 3vw, 2.5rem);
+  font-weight: 800;
+}
+
+.fields {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.field span {
+  color: rgba(255, 255, 255, 0.88);
+  font-weight: 600;
+}
+
+.field input {
+  width: 100%;
+  border: 1px solid #4b5563;
+  background: #1f2937;
+  color: #ffffff;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.field input::placeholder {
+  color: #9ca3af;
+}
+
+.field input:focus {
+  border-color: var(--primary-orange);
+  box-shadow: 0 0 0 3px rgba(243, 156, 18, 0.2);
+  background: #243244;
+}
+
+.actions {
+  margin-top: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+}
+
+.save-button {
+  border: none;
+  background: var(--primary-orange);
+  color: #ffffff;
+  font-weight: 800;
+  padding: 0.9rem 1.5rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.save-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(243, 156, 18, 0.28);
+}
+
+.cancel-link {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.cancel-link:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  .profile-page {
+    padding: 1.5rem 1rem;
+  }
+
+  .profile-panel {
+    padding: 1.5rem;
+    border-radius: 18px;
+  }
+
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cancel-link {
+    text-align: center;
+  }
+}

@@ -6,8 +6,25 @@ html, body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: #f4f6f8;
+  color: #0f1724;
 }
 
 app-root {
   display: block;
+}
+
+/* Design tokens */
+$primary-orange: #f39c12;
+$bg-dark-blue: #111827;
+$secondary-gray: #6b7280;
+$brand-blue: #1e3a5f;
+$light-blue: #2c4a73;
+
+:root {
+  --primary-orange: #f39c12;
+  --bg-dark-blue: #111827;
+  --secondary-gray: #6b7280;
+  --brand-blue: #1e3a5f;
+  --light-blue: #2c4a73;
 }

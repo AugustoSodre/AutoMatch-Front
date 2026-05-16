@@ -1,0 +1,28 @@
+<div class="modal-backdrop" (click)="onClose()">
+  <div class="modal-panel" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div>
+        <p class="modal-eyebrow">Selecionar veículo</p>
+        <h3>{{ title }}</h3>
+      </div>
+      <button type="button" class="close-button" (click)="onClose()" aria-label="Fechar seleção">×</button>
+    </div>
+
+    <div class="modal-grid">
+      <button
+        type="button"
+        *ngFor="let car of cars"
+        class="car-option"
+        [class.is-selected]="car.id === selectedCarId"
+        (click)="onSelectCar(car.id)"
+      >
+        <img [src]="car.images.main" [alt]="car.name" />
+        <div class="car-copy">
+          <strong>{{ car.name }}</strong>
+          <span>{{ car.year }}</span>
+          <em>{{ formatPrice(car.price) }}</em>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>

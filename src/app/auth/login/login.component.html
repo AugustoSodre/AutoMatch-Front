@@ -1,0 +1,24 @@
+<div class="auth-shell">
+  <aside class="auth-left" aria-hidden="true"></aside>
+  <section class="auth-right">
+    <div class="auth-card">
+      <h2>Entrar no AutoMatch</h2>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+        <app-form-input label="Email" type="email" [control]="emailControl" placeholder="you@exemplo.com"></app-form-input>
+        <app-form-input label="Senha" type="password" [control]="passwordControl" placeholder="Sua senha"></app-form-input>
+
+        <button class="btn-primary" type="submit">Entrar</button>
+      </form>
+
+      <div class="auth-footer">
+        <p>Não tem conta? <a routerLink="/register">Crie uma conta</a></p>
+        <div class="or">OU</div>
+        <div class="socials">
+          <button class="social"><span class="icon">G</span> Entre com Google</button>
+          <button class="social"><span class="icon">GH</span> Entre com Github</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

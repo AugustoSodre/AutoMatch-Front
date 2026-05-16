@@ -1,0 +1,11 @@
+.form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+.label { font-weight: 600; color: var(--bg-dark-blue); }
+.input {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #e6eef8;
+  background: #ffffff;
+  outline: none;
+}
+.input:focus { box-shadow: 0 6px 18px rgba(37,99,235,0.08); border-color: var(--primary-orange); }
+.error small { color: #dc2626; }

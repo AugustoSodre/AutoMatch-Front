@@ -1,0 +1,156 @@
+<main class="saved-matches-dashboard">
+  <section class="dashboard-shell">
+    <header class="dashboard-header">
+      <div>
+        <p class="dashboard-eyebrow">Minha garagem</p>
+        <h1>Meus Carros Salvos</h1>
+        <p class="dashboard-description">
+          Acompanhe seus matches, compare dois veículos lado a lado e mantenha tudo organizado em um painel premium.
+        </p>
+      </div>
+
+      <div class="dashboard-highlight">
+        <span>Total salvo</span>
+        <strong>{{ (dashboardState$ | async)?.totalMatches ?? 0 }}</strong>
+      </div>
+    </header>
+
+    <section class="utility-bar" [formGroup]="dashboardForm" aria-label="Ferramentas do dashboard">
+      <label class="utility-field search-field">
+        <span>Buscar</span>
+        <input type="search" formControlName="search" placeholder="Filtrar por nome ou ano..." />
+      </label>
+
+      <label class="utility-field sort-field">
+        <span>Sort By</span>
+        <select formControlName="sort">
+          <option value="savedAtDesc">Date Saved</option>
+          <option value="matchPctDesc">Match Percentage</option>
+          <option value="priceDesc">Price: High to Low</option>
+        </select>
+      </label>
+
+      <div class="view-toggle" role="group" aria-label="Alternar visualização">
+        <button type="button" [class.is-active]="viewControl.value === 'grid'" (click)="setViewMode('grid')">
+          Grid View
+        </button>
+        <button type="button" [class.is-active]="viewControl.value === 'list'" (click)="setViewMode('list')">
+          List View
+        </button>
+      </div>
+    </section>
+
+    <ng-container *ngIf="dashboardState$ | async as state">
+      <section class="dashboard-empty" *ngIf="state.totalMatches === 0; else dashboardContent">
+        <div class="empty-state-card">
+          <div class="empty-icon" aria-hidden="true">
+            <svg viewBox="0 0 120 120" role="presentation">
+              <path
+                d="M24 55c0-15.464 12.536-28 28-28h16c15.464 0 28 12.536 28 28v21H24V55Z"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="6"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M30 76h60l-5-17H35l-5 17Z"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="6"
+                stroke-linejoin="round"
+              />
+              <circle cx="43" cy="83" r="6" fill="none" stroke="currentColor" stroke-width="6" />
+              <circle cx="77" cy="83" r="6" fill="none" stroke="currentColor" stroke-width="6" />
+              <path d="M80 35l14 14" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" />
+              <circle cx="96" cy="19" r="11" fill="none" stroke="currentColor" stroke-width="6" />
+            </svg>
+          </div>
+
+          <h2>Sua garagem está vazia!</h2>
+          <p>Salve um match para acompanhar os veículos favoritos, comparar opções e voltar a eles quando quiser.</p>
+
+          <button type="button" class="primary-action" (click)="startNewMatch()">Iniciar Novo Match</button>
+        </div>
+      </section>
+
+      <ng-template #dashboardContent>
+        <section class="matches-empty-results" *ngIf="state.filteredMatches === 0; else matchesPanel">
+          <div>
+            <h2>Nenhum carro corresponde ao filtro atual.</h2>
+            <p>Altere a busca ou o ordenamento para encontrar seus salvos novamente.</p>
+          </div>
+          <button type="button" class="secondary-action" (click)="searchControl.setValue('')">Limpar filtro</button>
+        </section>
+
+        <ng-template #matchesPanel>
+          <section *ngIf="state.viewMode === 'grid'; else listView" class="matches-grid">
+            <app-vehicle-card
+              *ngFor="let match of state.matches; trackBy: trackByCarId"
+              [match]="match"
+              [selectedForCompare]="isSelectedForCompare(match.car.id)"
+              (toggleCompare)="toggleCompare(match.car.id)"
+            ></app-vehicle-card>
+          </section>
+
+          <ng-template #listView>
+            <section class="matches-table-shell">
+              <table class="matches-table">
+                <thead>
+                  <tr>
+                    <th>Carro</th>
+                    <th>Ano</th>
+                    <th>Match</th>
+                    <th>Preço</th>
+                    <th>Salvo em</th>
+                    <th>Ação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let match of state.matches; trackBy: trackByCarId" [class.is-selected]="isSelectedForCompare(match.car.id)">
+                    <td>
+                      <div class="table-car">
+                        <img [src]="match.car.images.main" [alt]="match.car.name" />
+                        <div>
+                          <strong>{{ match.car.name }}</strong>
+                          <span>{{ match.car.category }}</span>
+                        </div>
+                      </div>
+                    </td>
+                    <td>{{ match.car.year }}</td>
+                    <td>{{ match.matchPct }}%</td>
+                    <td>{{ formatCurrency(match.car.price) }}</td>
+                    <td>{{ formatDate(match.savedAt) }}</td>
+                    <td>
+                      <button
+                        type="button"
+                        class="table-compare-button"
+                        [class.is-selected]="isSelectedForCompare(match.car.id)"
+                        (click)="toggleCompare(match.car.id)"
+                      >
+                        {{ isSelectedForCompare(match.car.id) ? 'Selecionado' : 'Comparar' }}
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </section>
+          </ng-template>
+        </ng-template>
+      </ng-template>
+    </ng-container>
+  </section>
+
+  <ng-container *ngIf="selectedCompareMatches$ | async as selectedCompareMatches">
+    <aside class="compare-banner" *ngIf="selectedCompareMatches.length === 2">
+      <div class="compare-banner__summary">
+        <span>Comparação pronta</span>
+        <strong>{{ selectedCompareMatches[0].car.name }} vs {{ selectedCompareMatches[1].car.name }}</strong>
+      </div>
+
+      <div class="compare-banner__actions">
+        <button type="button" class="ghost-action" (click)="clearCompareSelection()">Limpar</button>
+        <button type="button" class="primary-action" (click)="openComparison()">Comparar Agora</button>
+      </div>
+    </aside>
+  </ng-container>
+</main>

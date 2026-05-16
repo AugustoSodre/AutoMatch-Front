@@ -1,22 +1,22 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 
-import { HomeComponent } from './home.component';
 import { SharedModule } from '../shared/shared.module';
+import { AccountHubComponent } from './account-hub.component';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent }
+  { path: '', component: AccountHubComponent }
 ];
 
 @NgModule({
-  declarations: [
-    HomeComponent
-  ],
+  declarations: [AccountHubComponent],
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     SharedModule,
     RouterModule.forChild(routes)
   ]
 })
-export class HomeModule { }
+export class AccountHubModule { }

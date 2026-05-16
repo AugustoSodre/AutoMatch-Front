@@ -1,0 +1,31 @@
+<article class="vehicle-card" *ngIf="car; else emptyState">
+  <div class="vehicle-image">
+    <img [src]="car.images.main" [alt]="car.name" />
+  </div>
+
+  <div class="vehicle-body">
+    <div class="vehicle-headline">
+      <p class="slot-label">{{ slotLabel }}</p>
+      <h2>{{ car.name }}</h2>
+      <p class="vehicle-year">{{ car.year }}</p>
+    </div>
+
+    <div class="vehicle-price">{{ formatPrice(car.price) }}</div>
+
+    <button type="button" class="change-button" (click)="onChangeVehicle()">
+      Trocar veículo
+    </button>
+  </div>
+</article>
+
+<ng-template #emptyState>
+  <article class="vehicle-card empty">
+    <div class="vehicle-body">
+      <p class="slot-label">{{ slotLabel }}</p>
+      <h2>Selecione um veículo</h2>
+      <button type="button" class="change-button" (click)="onChangeVehicle()">
+        Escolher veículo
+      </button>
+    </div>
+  </article>
+</ng-template>

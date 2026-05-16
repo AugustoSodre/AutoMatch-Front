@@ -1,0 +1,18 @@
+.auth-shell { display: flex; min-height: calc(100vh - 80px); }
+.auth-left { flex: 1; background-image: url('https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=1200&q=60'); background-size: cover; background-position: center; filter: brightness(0.7); }
+.auth-right { flex: 1; display: flex; align-items: center; justify-content: center; background: #ffffff; }
+.auth-card { width: 100%; max-width: 440px; padding: 2rem; }
+.auth-card h2 { margin: 0 0 1rem 0; color: var(--bg-dark-blue); }
+.btn-primary { width: 100%; padding: 0.85rem; border-radius: 8px; background: var(--primary-orange); border: none; color: white; font-weight: 700; margin-top: 1rem; }
+.auth-footer { margin-top: 1.1rem; text-align: center; color: var(--secondary-gray); }
+.auth-footer a { color: var(--brand-blue); font-weight: 600; text-decoration: none; }
+.or { margin: 1rem 0; font-weight: 700; color: var(--secondary-gray); }
+.socials { display: flex; gap: 0.5rem; justify-content: center; }
+.social { flex: 1; padding: 0.6rem 0.75rem; border-radius: 8px; border: 1px solid rgba(0,0,0,0.08); background: white; display: flex; gap: 0.5rem; align-items: center; justify-content: center; }
+.social .icon { display: inline-flex; width: 20px; height: 20px; align-items: center; justify-content: center; border-radius: 4px; background: rgba(0,0,0,0.05); font-weight: 700; }
+
+@media (max-width: 900px) {
+  .auth-shell { flex-direction: column; }
+  .auth-left { height: 220px; width: 100%; }
+  .auth-right { padding: 2rem 0; }
+}
