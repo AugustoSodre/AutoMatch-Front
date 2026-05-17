@@ -1,5 +1,7 @@
 header {
   background: linear-gradient(135deg, #1e3a5f 0%, #2c4a73 100%);
+  /* header height used for mobile overlays/menus */
+  --header-height: 64px;
   padding: 1.2rem 0;
   position: relative;
   z-index: 1000;
@@ -14,6 +16,7 @@ header {
     max-width: 1600px;
     margin: 0 auto;
     padding: 0 3rem;
+    height: auto;
   }
 }
 
@@ -83,4 +86,118 @@ header {
       border-bottom: 2px solid white;
     }
   }
+}
+
+/* Hamburger button (hidden on desktop) */
+.hamburger {
+  display: none;
+  background: transparent;
+  border: none;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  padding: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-left: auto;
+  position: relative;
+  z-index: 1003;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.hamburger .bar {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: white;
+  border-radius: 999px;
+  transform-origin: center;
+  transition: transform 220ms ease, opacity 180ms ease, background-color 180ms ease;
+}
+
+.hamburger.is-open .bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.hamburger.is-open .bar:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0.2);
+}
+
+.hamburger.is-open .bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Mobile nav styles */
+@media (max-width: 768px) {
+  .hamburger { display: inline-flex; }
+
+  .nav-links {
+    display: flex;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, #1e3a5f 0%, #2c4a73 100%);
+    flex-direction: column;
+    gap: 0;
+    padding: 0.75rem 1rem 1rem;
+    z-index: 1001;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    max-height: calc(100vh - var(--header-height));
+    overflow-y: auto;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-8px);
+    transition: opacity 220ms ease, transform 220ms ease, visibility 0s linear 220ms;
+  }
+
+  .nav-links.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+    transition: opacity 220ms ease, transform 220ms ease, visibility 0s;
+  }
+
+  .nav-links li { width: 100%; }
+
+  .nav-links a {
+    display: block;
+    padding: 0.75rem 0.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .mobile-overlay {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    height: calc(100vh - 100%);
+    background: rgba(0,0,0,0.45);
+    z-index: 900;
+  }
+}
+
+/* Additional mobile header tweaks */
+@media (max-width: 768px) {
+  .navbar .container { padding-left: 1rem; padding-right: 1rem; }
+
+  /* Reduce brand text to save space */
+  .brand .brand-text { display: none; }
+
+  .hamburger {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+}
+
+/* Ensure header height variable matches actual container on smaller screens */
+@media (max-width: 768px) {
+  header { --header-height: 56px; }
+  .navbar .container { height: var(--header-height); }
 }

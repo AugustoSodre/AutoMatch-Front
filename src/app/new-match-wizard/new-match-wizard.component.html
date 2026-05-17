@@ -207,14 +207,14 @@
       </section>
 
       <div class="wizard-actions">
-        <button type="button" class="ghost-button" (click)="goBack()" [disabled]="currentStep === 1 || isCalculating">
+        <app-shared-button variant="secondary" type="button" (buttonClick)="goBack()" [disabled]="currentStep === 1 || isCalculating">
           Voltar
-        </button>
+        </app-shared-button>
 
-        <button type="submit" class="primary-button" [disabled]="isCalculating || !canProceed">
+        <app-shared-button variant="primary" type="submit" [disabled]="isCalculating || !canProceed">
           <span class="button-icon">{{ primaryActionIcon }}</span>
           <span>{{ primaryActionLabel }}</span>
-        </button>
+        </app-shared-button>
       </div>
     </form>
   </section>

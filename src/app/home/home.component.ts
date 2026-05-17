@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { MockImageService } from '../mock-image.service';
+import { MockImageService } from '../systems-services';
 
 interface CategoryCard {
   title: string;

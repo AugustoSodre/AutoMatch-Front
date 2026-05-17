@@ -188,3 +188,40 @@
   .value-card { flex-direction: column; gap: 0.5rem; }
   .vp-sep { display: none; }
 }
+
+/* Mobile adjustments for <= 768px */
+@media (max-width: 768px) {
+  .hero {
+    height: 45vh;
+    min-height: 320px;
+  }
+
+  .hero-inner { padding: 1.25rem; }
+
+  /* Reduce main hero heading size to prevent overflow */
+  .hero-left h1 {
+    font-size: 1.75rem;
+    line-height: 1.05;
+    margin: 1rem 0;
+  }
+
+  /* Value prop pill adjustments */
+  .value-prop {
+    transform: translateY(-30%);
+    margin-bottom: 1.5rem;
+    padding: 0 0.5rem;
+  }
+
+  .value-card {
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px 20px;
+    border-radius: 16px;
+    max-width: 92%;
+    margin: 0 auto;
+  }
+
+  .vp-sep { display: none; }
+
+  .vp-item { text-align: center; }
+}

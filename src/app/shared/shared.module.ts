@@ -6,12 +6,14 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { FormInputComponent } from './form-input/form-input.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ButtonComponent } from './button/button.component';
 
 @NgModule({
   declarations: [
     HeaderComponent,
     FooterComponent,
-    FormInputComponent
+    FormInputComponent,
+    ButtonComponent
   ],
   imports: [
     CommonModule,
@@ -22,6 +24,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     HeaderComponent,
     FooterComponent,
     FormInputComponent,
+    ButtonComponent,
     RouterModule
   ]
 })

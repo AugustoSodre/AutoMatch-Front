@@ -4,9 +4,9 @@ import { Observable, map } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
 import { Car } from '../car.interface';
-import { CarService } from '../car.service';
+import { CarService } from '../systems-services';
 import { ComparisonSpec } from './comparison-spec.interface';
-import { ComparisonService } from './comparison.service';
+import { ComparisonService } from '../systems-services';
 import { CarSelectorModalComponent } from './car-selector-modal.component';
 import { VehicleCompareCardComponent } from './vehicle-compare-card.component';
 

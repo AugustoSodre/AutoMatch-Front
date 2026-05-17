@@ -3,9 +3,10 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, combineLatest, map, startWith, debounceTime, distinctUntilChanged } from 'rxjs';
+import { Car } from '../car.interface';
 
-import { CarService } from '../car.service';
-import { AccountService } from '../account.service';
+import { AccountService } from '../systems-services/account.service';
+import { CarService } from '../systems-services/car.service';
 import {
   SavedMatchRecord,
   SavedMatchViewModel,
@@ -43,10 +44,12 @@ export class SavedMatchesDashboardComponent {
     this.accountService.getSavedMatches(),
     this.carService.getCars()
   ]).pipe(
-    map(([savedMatches, cars]) =>
-      savedMatches
+    map((tuple: [ReadonlyArray<SavedMatchRecord>, Car[]]) => {
+      const [savedMatches, cars] = tuple;
+
+      return savedMatches
         .map((record: SavedMatchRecord) => {
-          const car = cars.find((item) => item.id === record.carId);
+          const car = cars.find((item: Car) => item.id === record.carId);
           if (!car) {
             return null;
           }
@@ -56,8 +59,8 @@ export class SavedMatchesDashboardComponent {
             car
           };
         })
-        .filter((match): match is SavedMatchViewModel => match !== null)
-    )
+        .filter((match: SavedMatchViewModel | null): match is SavedMatchViewModel => match !== null);
+    })
   );
 
   public readonly dashboardState$: Observable<SavedMatchesDashboardState> = combineLatest([
@@ -85,8 +88,8 @@ export class SavedMatchesDashboardComponent {
   ]).pipe(
     map(([matches, selectedIds]) =>
       selectedIds
-        .map((matchId) => matches.find((match) => match.car.id === matchId) ?? null)
-        .filter((match): match is SavedMatchViewModel => match !== null)
+        .map((matchId: string) => matches.find((match: SavedMatchViewModel) => match.car.id === matchId) ?? null)
+        .filter((match: SavedMatchViewModel | null): match is SavedMatchViewModel => match !== null)
     )
   );
 

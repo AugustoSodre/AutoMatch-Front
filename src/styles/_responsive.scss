@@ -1,0 +1,71 @@
+/* Responsive helpers and overrides for small devices */
+
+/* Fluid base font size for better scaling */
+html {
+  font-size: clamp(14px, 1.5vw + 12px, 16px);
+}
+
+/* Container adjustments */
+.container {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  max-width: 100%;
+}
+
+/* Header adjustments */
+header {
+  padding: 0.8rem 0;
+}
+
+.navbar .container {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.brand .logo {
+  width: 40px;
+  height: 40px;
+}
+
+.brand .brand-text {
+  font-size: 1rem;
+}
+
+.nav-links {
+  gap: 1rem;
+  overflow-x: auto;
+}
+
+/* Make hero/image sections stack nicely */
+main, section {
+  width: 100%;
+}
+
+/* Cards/grid stacking */
+.two-column-layout, .form-grid.two-column {
+  display: block;
+}
+
+.two-column-layout > *,
+.form-grid.two-column > * {
+  width: 100%;
+}
+
+/* Smaller buttons and touch targets */
+app-shared-button .btn {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.95rem;
+}
+
+/* Specific breakpoints for tighter layouts */
+@media (max-width: 768px) {
+  .nav-links { gap: 0.75rem; }
+  header { padding: 0.6rem 0; }
+}
+
+@media (max-width: 420px) {
+  .nav-links { gap: 0.5rem; }
+  .brand .brand-text { display: none; }
+  .navbar .container { padding-left: 0.75rem; padding-right: 0.75rem; }
+  .cta-wrapper { padding-left: 0.75rem; padding-right: 0.75rem; }
+}

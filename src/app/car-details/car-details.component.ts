@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { MockImageService } from '../mock-image.service';
+import { MockImageService } from '../systems-services';
 
 interface DetailItem {
   label: string;

@@ -5,14 +5,20 @@
         <span class="logo">🚗</span>
         <span class="brand-text">AutoMatch</span>
       </a>
-      <ul class="nav-links">
-        <li><a [routerLink]="['/home']" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a></li>
-        <li><a [routerLink]="['/novo-match']" routerLinkActive="active">Novo match</a></li>
-        <li><a [routerLink]="['/profile']" routerLinkActive="active">Perfil</a></li>
-        <li><a [routerLink]="['/comparar']" routerLinkActive="active">Comparar</a></li>
-        <li><a [routerLink]="['/about']" routerLinkActive="active">Sobre</a></li>
-        <li><a [routerLink]="['/matches']" routerLinkActive="active">Meus matches</a></li>
+      <button class="hamburger" [class.is-open]="isOpen" aria-label="Abrir menu" aria-controls="primary-navigation" [attr.aria-expanded]="isOpen" (click)="toggleMenu()">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+      <ul class="nav-links" [class.is-open]="isOpen" id="primary-navigation">
+        <li><a (click)="closeMenu()" [routerLink]="['/home']" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a></li>
+        <li><a (click)="closeMenu()" [routerLink]="['/novo-match']" routerLinkActive="active">Novo match</a></li>
+        <li><a (click)="closeMenu()" [routerLink]="['/profile']" routerLinkActive="active">Perfil</a></li>
+        <li><a (click)="closeMenu()" [routerLink]="['/comparar']" routerLinkActive="active">Comparar</a></li>
+        <li><a (click)="closeMenu()" [routerLink]="['/about']" routerLinkActive="active">Sobre</a></li>
+        <li><a (click)="closeMenu()" [routerLink]="['/matches']" routerLinkActive="active">Meus matches</a></li>
       </ul>
     </div>
   </nav>
+  <div class="mobile-overlay" *ngIf="isOpen" (click)="closeMenu()" aria-hidden="true"></div>
 </header>

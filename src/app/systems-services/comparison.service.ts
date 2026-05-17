@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';
 
-import { CarService } from '../car.service';
+import { CarService } from './car.service';
 import { Car } from '../car.interface';
 
 @Injectable({

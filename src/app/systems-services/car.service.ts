@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
-import { Car } from './car.interface';
+import { Car } from '../car.interface';
 
 @Injectable({
   providedIn: 'root'

@@ -1,7 +1,11 @@
+@import './styles/reset';
+
 /* Global Styles */
 html, body {
   height: 100%;
 }
+
+@import './styles/responsive';
 
 body {
   margin: 0;

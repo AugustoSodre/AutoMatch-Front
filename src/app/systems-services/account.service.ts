@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { SavedMatchRecord } from './matches/saved-match.model';
+import { SavedMatchRecord } from '../matches/saved-match.model';
 
 @Injectable({
   providedIn: 'root'

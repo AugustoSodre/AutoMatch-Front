@@ -3,7 +3,8 @@ import { ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef } from '@
 import { Router } from '@angular/router';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 
-import { MockImageService } from '../mock-image.service';
+import { MockImageService } from '../systems-services';
+import { SharedModule } from '../shared/shared.module';
 
 interface WizardStep {
   number: 1 | 2 | 3;
@@ -42,7 +43,7 @@ interface WizardPayload {
 @Component({
   selector: 'app-new-match-wizard',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, SharedModule],
   templateUrl: './new-match-wizard.component.html',
   styleUrls: ['./new-match-wizard.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

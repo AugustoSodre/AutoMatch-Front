@@ -11,12 +11,12 @@ export interface CategoryImageMap {
   providedIn: 'root'
 })
 export class MockImageService {
-    private readonly categoryImages: CategoryImageMap = {
-    populares: 'https://images.unsplash.com/photo-1614152204322-e6ab7f040c1d?auto=format&fit=crop&w=800&q=80', // Mercedes SUV
-    aventura: 'https://images.unsplash.com/photo-1490902931801-d6f80ca94fe4?auto=format&fit=crop&w=800&q=80',  // Defender crossing water
-    familia: 'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=800&q=80',  // Safe, spacious SUV
-    luxo: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=800&q=80'   // Luxury Mercedes
-};
+  private readonly categoryImages: CategoryImageMap = {
+    populares: 'https://images.unsplash.com/photo-1614152204322-e6ab7f040c1d?auto=format&fit=crop&w=800&q=80',
+    aventura: 'https://images.unsplash.com/photo-1490902931801-d6f80ca94fe4?auto=format&fit=crop&w=800&q=80',
+    familia: 'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=800&q=80',
+    luxo: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=800&q=80'
+  };
 
   public getCategoryImages(): CategoryImageMap {
     return { ...this.categoryImages };
