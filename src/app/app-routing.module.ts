@@ -16,6 +16,7 @@ const routes: Routes = [
   { path: 'comparar', loadComponent: () => import('./comparison-page/comparison-page.component').then((component) => component.ComparisonPageComponent) },
   { path: 'novo-match', loadComponent: () => import('./new-match-wizard/new-match-wizard.component').then((component) => component.NewMatchWizardComponent) },
   { path: 'car-details', loadChildren: () => import('./car-details/car-details.module').then((module) => module.CarDetailsModule) },
+  { path: 'admin', loadChildren: () => import('./admin/admin.module').then((module) => module.AdminModule) },
   { path: '**', redirectTo: 'home' }
 ];
 

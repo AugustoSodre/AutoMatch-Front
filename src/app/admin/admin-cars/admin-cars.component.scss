@@ -1,0 +1,343 @@
+.admin-page {
+  min-height: calc(100vh - 80px);
+  background: #0f172a;
+  padding: 2rem 1.5rem 3rem;
+}
+
+.admin-shell {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(280px, 25%) minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.admin-nav,
+.admin-content {
+  background: rgba(17, 24, 39, 0.92);
+  border: 1px solid rgba(75, 85, 99, 0.5);
+  border-radius: 18px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.25);
+}
+
+.admin-nav {
+  padding: 1.5rem;
+}
+
+.nav-header {
+  text-align: center;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(75, 85, 99, 0.45);
+  margin-bottom: 1.25rem;
+}
+
+.nav-header h2 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+.nav-header p {
+  margin: 0.25rem 0 0;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.85rem;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.95rem 1rem;
+  border-radius: 14px;
+  color: rgba(255, 255, 255, 0.82);
+  text-decoration: none;
+  border-left: 3px solid transparent;
+  background: rgba(255, 255, 255, 0.015);
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.menu-item:hover {
+  background: rgba(255, 255, 255, 0.055);
+  color: #ffffff;
+  transform: translateX(2px);
+}
+
+.menu-item.is-active {
+  background: rgba(243, 156, 18, 0.12);
+  border-left-color: var(--primary-orange);
+  color: #ffffff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.menu-icon {
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.07);
+  color: #fbbf24;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.menu-label {
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.admin-content {
+  padding: 2.25rem;
+}
+
+.content-header h1 {
+  margin: 0;
+  color: #ffffff;
+  font-size: clamp(2rem, 3vw, 2.6rem);
+  font-weight: 800;
+}
+
+.content-header p {
+  margin: 0.75rem 0 0;
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.7;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
+
+.form-card {
+  background: rgba(31, 41, 55, 0.6);
+  border: 1px solid rgba(75, 85, 99, 0.4);
+  border-radius: 18px;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.form-card h3 {
+  margin: 0 0 1rem;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.form-error {
+  background: rgba(220, 38, 38, 0.15);
+  color: #fca5a5;
+  padding: 0.75rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.form-grid {
+  display: grid;
+  gap: 1.35rem;
+  margin-bottom: 1.35rem;
+}
+
+.two-column {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.three-column {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.single-column {
+  grid-template-columns: 1fr;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.field span {
+  color: rgba(255, 255, 255, 0.88);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  border: 1px solid #4b5563;
+  background: #1f2937;
+  color: #ffffff;
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: #9ca3af;
+}
+
+.field input:focus,
+.field textarea:focus {
+  border-color: var(--primary-orange);
+  background: #243244;
+  box-shadow: 0 0 0 3px rgba(243, 156, 18, 0.2);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.btn-primary {
+  border: none;
+  background: var(--primary-orange);
+  color: #111827;
+  font-weight: 800;
+  padding: 0.85rem 1.6rem;
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.03);
+  box-shadow: 0 14px 28px rgba(243, 156, 18, 0.22);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 600;
+  padding: 0.85rem 1.6rem;
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #ffffff;
+}
+
+.loading {
+  text-align: center;
+  padding: 3rem;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.table-shell {
+  margin-top: 1.5rem;
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.data-table th,
+.data-table td {
+  text-align: left;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid rgba(75, 85, 99, 0.3);
+}
+
+.data-table th {
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.data-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.car-thumb {
+  width: 60px;
+  height: 40px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.btn-small {
+  padding: 0.4rem 0.85rem;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-edit {
+  background: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+  margin-right: 0.5rem;
+}
+
+.btn-edit:hover {
+  background: rgba(59, 130, 246, 0.35);
+}
+
+.btn-delete {
+  background: rgba(220, 38, 38, 0.2);
+  color: #fca5a5;
+}
+
+.btn-delete:hover {
+  background: rgba(220, 38, 38, 0.35);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+@media (max-width: 1024px) {
+  .admin-shell {
+    grid-template-columns: 1fr;
+  }
+  .admin-nav { order: 2; }
+  .admin-content { order: 1; }
+}
+
+@media (max-width: 720px) {
+  .admin-page { padding: 1rem; }
+  .two-column, .three-column { grid-template-columns: 1fr; }
+  .menu { flex-direction: row; flex-wrap: wrap; gap: 0.5rem; }
+  .menu-item { flex: 1 1 calc(50% - 0.25rem); border-left-width: 3px; }
+  .form-actions { flex-direction: column-reverse; align-items: stretch; }
+  .btn-primary, .btn-secondary { width: 100%; text-align: center; }
+  .actions-cell { display: flex; gap: 0.25rem; }
+  .btn-small { flex: 1; text-align: center; }
+}

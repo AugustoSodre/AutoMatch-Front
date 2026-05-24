@@ -1,0 +1,82 @@
+<main class="admin-page">
+  <section class="admin-shell">
+    <aside class="admin-nav">
+      <div class="nav-header">
+        <h2>Admin</h2>
+        <p>Painel de controle</p>
+      </div>
+      <nav class="menu">
+        <a routerLink="/admin" routerLinkActive="is-active" [routerLinkActiveOptions]="{ exact: true }" class="menu-item">
+          <span class="menu-icon">📊</span>
+          <span class="menu-label">Dashboard</span>
+        </a>
+        <a routerLink="/admin/carros" routerLinkActive="is-active" class="menu-item">
+          <span class="menu-icon">🚗</span>
+          <span class="menu-label">Gerenciar Carros</span>
+        </a>
+        <a routerLink="/admin/usuarios" routerLinkActive="is-active" class="menu-item">
+          <span class="menu-icon">👥</span>
+          <span class="menu-label">Gerenciar Usuários</span>
+        </a>
+        <a routerLink="/home" class="menu-item">
+          <span class="menu-icon">←</span>
+          <span class="menu-label">Voltar ao Site</span>
+        </a>
+      </nav>
+    </aside>
+
+    <section class="admin-content">
+      <header class="content-header">
+        <h1>Gerenciar Usuários</h1>
+        <p>Gerencie os usuários da plataforma e suas permissões.</p>
+      </header>
+
+      <div class="loading" *ngIf="loading">Carregando...</div>
+
+      <div class="table-shell" *ngIf="!loading && users.length > 0">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Criado em</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of users; trackBy: trackByUserId">
+              <td>
+                <strong>{{ user.fullName }}</strong>
+                <span class="self-badge" *ngIf="isSelf(user.id)">(você)</span>
+              </td>
+              <td>{{ user.email }}</td>
+              <td>
+                <span class="role-badge" [class.is-admin]="user.role === 'ADMIN'">
+                  {{ user.role === 'ADMIN' ? 'Admin' : 'Usuário' }}
+                </span>
+              </td>
+              <td>{{ formatDate(user.createdAt) }}</td>
+              <td>
+                <button
+                  type="button"
+                  class="btn-small"
+                  [class.btn-promote]="user.role !== 'ADMIN'"
+                  [class.btn-demote]="user.role === 'ADMIN'"
+                  [disabled]="isSelf(user.id)"
+                  (click)="toggleRole(user)"
+                >
+                  {{ user.role === 'ADMIN' ? 'Remover Admin' : 'Tornar Admin' }}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="empty-state" *ngIf="!loading && users.length === 0">
+        <p>Nenhum usuário encontrado.</p>
+      </div>
+    </section>
+  </section>
+</main>

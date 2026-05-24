@@ -5,6 +5,7 @@
       <h2>Crie sua conta no AutoMatch</h2>
 
       <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+        <div class="auth-error" *ngIf="error">{{ error }}</div>
         <app-form-input label="Nome completo" [control]="fullNameControl" placeholder="Seu nome completo"></app-form-input>
         <app-form-input label="Email" type="email" [control]="emailControl" placeholder="you@exemplo.com"></app-form-input>
         <app-form-input label="Senha" type="password" [control]="passwordControl" placeholder="Mínimo 6 caracteres"></app-form-input>

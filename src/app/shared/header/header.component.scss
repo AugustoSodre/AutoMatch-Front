@@ -88,6 +88,52 @@ header {
   }
 }
 
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-left: 1rem;
+  padding-left: 1rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.user-name {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.logout-link {
+  font-size: 0.8rem !important;
+  opacity: 0.7;
+}
+
+.logout-link:hover {
+  opacity: 1 !important;
+}
+
+@media (max-width: 768px) {
+  .nav-user {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.25rem;
+    margin-left: 0;
+    padding-left: 0;
+    border-left: none;
+    padding: 0.75rem 0.5rem;
+  }
+
+  .user-name {
+    font-size: 0.9rem;
+  }
+
+  .logout-link {
+    text-align: left;
+    padding: 0.25rem 0 !important;
+  }
+}
+
 /* Hamburger button (hidden on desktop) */
 .hamburger {
   display: none;

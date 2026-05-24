@@ -3,12 +3,9 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, combineLatest, map, startWith, debounceTime, distinctUntilChanged } from 'rxjs';
-import { Car } from '../car.interface';
 
 import { AccountService } from '../systems-services/account.service';
-import { CarService } from '../systems-services/car.service';
 import {
-  SavedMatchRecord,
   SavedMatchViewModel,
   SavedMatchesSortOption,
   SavedMatchesViewMode
@@ -40,28 +37,7 @@ export class SavedMatchesDashboardComponent {
 
   private readonly compareSelectionSubject = new BehaviorSubject<ReadonlyArray<string>>([]);
 
-  public readonly savedMatches$ = combineLatest([
-    this.accountService.getSavedMatches(),
-    this.carService.getCars()
-  ]).pipe(
-    map((tuple: [ReadonlyArray<SavedMatchRecord>, Car[]]) => {
-      const [savedMatches, cars] = tuple;
-
-      return savedMatches
-        .map((record: SavedMatchRecord) => {
-          const car = cars.find((item: Car) => item.id === record.carId);
-          if (!car) {
-            return null;
-          }
-
-          return {
-            ...record,
-            car
-          };
-        })
-        .filter((match: SavedMatchViewModel | null): match is SavedMatchViewModel => match !== null);
-    })
-  );
+  public readonly savedMatches$ = this.accountService.getSavedMatches();
 
   public readonly dashboardState$: Observable<SavedMatchesDashboardState> = combineLatest([
     this.savedMatches$,
@@ -95,7 +71,6 @@ export class SavedMatchesDashboardComponent {
 
   constructor(
     private readonly accountService: AccountService,
-    private readonly carService: CarService,
     private readonly formBuilder: FormBuilder,
     private readonly router: Router
   ) {}
@@ -201,7 +176,7 @@ export class SavedMatchesDashboardComponent {
     nextMatches.sort((left, right) => {
       switch (sortBy) {
         case 'matchPctDesc':
-          return right.matchPct - left.matchPct;
+          return right.matchPercentage - left.matchPercentage;
         case 'priceDesc':
           return right.car.price - left.car.price;
         case 'savedAtDesc':

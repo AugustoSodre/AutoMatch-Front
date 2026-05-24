@@ -1,0 +1,162 @@
+<main class="admin-page">
+  <section class="admin-shell">
+    <aside class="admin-nav">
+      <div class="nav-header">
+        <h2>Admin</h2>
+        <p>Painel de controle</p>
+      </div>
+      <nav class="menu">
+        <a routerLink="/admin" routerLinkActive="is-active" [routerLinkActiveOptions]="{ exact: true }" class="menu-item">
+          <span class="menu-icon">📊</span>
+          <span class="menu-label">Dashboard</span>
+        </a>
+        <a routerLink="/admin/carros" routerLinkActive="is-active" class="menu-item">
+          <span class="menu-icon">🚗</span>
+          <span class="menu-label">Gerenciar Carros</span>
+        </a>
+        <a routerLink="/admin/usuarios" routerLinkActive="is-active" class="menu-item">
+          <span class="menu-icon">👥</span>
+          <span class="menu-label">Gerenciar Usuários</span>
+        </a>
+        <a routerLink="/home" class="menu-item">
+          <span class="menu-icon">←</span>
+          <span class="menu-label">Voltar ao Site</span>
+        </a>
+      </nav>
+    </aside>
+
+    <section class="admin-content">
+      <header class="content-header">
+        <h1>Gerenciar Carros</h1>
+        <p>Adicione, edite ou remova carros do catálogo.</p>
+      </header>
+
+      <div class="toolbar">
+        <button type="button" class="btn-primary" (click)="openNewForm()" *ngIf="!showForm">+ Novo Carro</button>
+      </div>
+
+      <div class="form-card" *ngIf="showForm">
+        <h3>{{ editCarId ? 'Editar' : 'Novo' }} Carro</h3>
+        <div class="form-error" *ngIf="error">{{ error }}</div>
+        <form [formGroup]="form" (ngSubmit)="submitForm()" novalidate>
+          <div class="form-grid two-column">
+            <label class="field">
+              <span>ID</span>
+              <input type="text" formControlName="id" placeholder="kwid-iconic-2026" />
+            </label>
+            <label class="field">
+              <span>Nome</span>
+              <input type="text" formControlName="name" placeholder="Kwid Iconic 1.0" />
+            </label>
+          </div>
+          <div class="form-grid three-column">
+            <label class="field">
+              <span>Ano</span>
+              <input type="number" formControlName="year" />
+            </label>
+            <label class="field">
+              <span>Preço</span>
+              <input type="number" formControlName="price" />
+            </label>
+            <label class="field">
+              <span>Categoria</span>
+              <input type="text" formControlName="category" placeholder="Popular" />
+            </label>
+          </div>
+          <div class="form-grid two-column">
+            <label class="field">
+              <span>Motor</span>
+              <input type="text" formControlName="engine" placeholder="1.0 12V Flex" />
+            </label>
+            <label class="field">
+              <span>Potência</span>
+              <input type="text" formControlName="power" placeholder="70 cv" />
+            </label>
+          </div>
+          <div class="form-grid two-column">
+            <label class="field">
+              <span>Consumo</span>
+              <input type="text" formControlName="consumption" placeholder="15,5 km/l" />
+            </label>
+            <label class="field">
+              <span>Peso</span>
+              <input type="text" formControlName="weight" placeholder="800 kg" />
+            </label>
+          </div>
+          <div class="form-grid three-column">
+            <label class="field">
+              <span>IPVA (R$)</span>
+              <input type="number" formControlName="ipva" />
+            </label>
+            <label class="field">
+              <span>Seguro (R$)</span>
+              <input type="number" formControlName="insurance" />
+            </label>
+            <label class="field">
+              <span>Manutenção (R$)</span>
+              <input type="number" formControlName="maintenance" />
+            </label>
+          </div>
+          <div class="form-grid single-column">
+            <label class="field">
+              <span>Características (uma por linha)</span>
+              <textarea formControlName="features" rows="3" placeholder="Airbag&#10;ABS&#10;Ar-condicionado"></textarea>
+            </label>
+          </div>
+          <div class="form-grid single-column">
+            <label class="field">
+              <span>URL da imagem principal</span>
+              <input type="url" formControlName="mainImage" placeholder="https://..." />
+            </label>
+          </div>
+          <div class="form-grid single-column">
+            <label class="field">
+              <span>URLs das thumbnails (uma por linha)</span>
+              <textarea formControlName="thumbnails" rows="3" placeholder="https://...&#10;https://..."></textarea>
+            </label>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn-secondary" (click)="cancelForm()">Cancelar</button>
+            <button type="submit" class="btn-primary" [disabled]="submitting">
+              {{ submitting ? 'Salvando...' : (editCarId ? 'Atualizar' : 'Criar Carro') }}
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="loading" *ngIf="loading">Carregando...</div>
+
+      <div class="table-shell" *ngIf="!loading && cars.length > 0">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Nome</th>
+              <th>Ano</th>
+              <th>Preço</th>
+              <th>Categoria</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let car of cars; trackBy: trackByCarId">
+              <td><img [src]="car.images.main" [alt]="car.name" class="car-thumb" /></td>
+              <td><strong>{{ car.name }}</strong></td>
+              <td>{{ car.year }}</td>
+              <td>{{ formatCurrency(car.price) }}</td>
+              <td>{{ car.category }}</td>
+              <td class="actions-cell">
+                <button type="button" class="btn-small btn-edit" (click)="openEditForm(car)">Editar</button>
+                <button type="button" class="btn-small btn-delete" (click)="deleteCar(car.id)">Excluir</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="empty-state" *ngIf="!loading && cars.length === 0">
+        <p>Nenhum carro cadastrado.</p>
+      </div>
+    </section>
+  </section>
+</main>
