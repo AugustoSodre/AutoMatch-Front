@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoMatch 2026 - O Carro Ideal</title>
+    <style>
+        :root {
+            --bg-dark: #0f172a;       /* Azul Marinho Profundo */
+            --card-bg: #1e293b;      /* Azul Médio */
+            --accent: #f59e0b;       /* Laranja Vibrante */
+            --light-blue: #93c5fd;   /* Azul Claro */
+            --white: #f8fafc;        /* Branco Suave */
+            --text-dim: #94a3b8;     /* Cinza Azulado */
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--white);
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .wizard-container {
+            width: 90%;
+            max-width: 500px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Progresso */
+        .progress-container {
+            margin-bottom: 30px;
+        }
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            color: var(--light-blue);
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+        .progress-bg {
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            transition: width 0.4s ease;
+            box-shadow: 0 0 10px var(--accent);
+        }
+
+        /* Perguntas */
+        .step { display: none; text-align: center; }
+        .step.active { display: block; animation: slideIn 0.4s ease-out; }
+
+        h2 { font-size: 1.5rem; line-height: 1.4; margin-bottom: 30px; }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .opt-btn {
+            padding: 18px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: 2px solid var(--light-blue);
+            background: transparent;
+            color: var(--white);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .opt-btn:hover {
+            background: var(--light-blue);
+            color: var(--bg-dark);
+        }
+
+        .opt-btn.yes:active { background: var(--accent); border-color: var(--accent); }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--text-dim);
+            cursor: pointer;
+            margin-top: 25px;
+            text-decoration: underline;
+        }
+
+        /* Loader */
+        .loader-container { display: none; text-align: center; padding: 40px 0; }
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid rgba(255,255,255,0.1);
+            border-top: 6px solid var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .result-card { text-align: center; }
+        .result-card h3 { color: var(--accent); font-size: 1.8rem; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="wizard-container">
+    <div id="mainInterface">
+        <div class="progress-container">
+            <div class="progress-label">
+                <span id="stepCounter">Pergunta 1 de 12</span>
+                <span id="percentLabel">0%</span>
+            </div>
+            <div class="progress-bg"><div class="progress-fill" id="progressBar"></div></div>
+        </div>
+
+        <div id="questionWrapper">
+            </div>
+
+        <button class="back-btn" id="btnBack" onclick="changeStep(-1)" style="visibility: hidden;">Voltar para anterior</button>
+    </div>
+
+    <div id="loader" class="loader-container">
+        <div class="spinner"></div>
+        <p>Analisando seu perfil no banco de dados 2026...</p>
+    </div>
+
+    <div id="resultArea" class="step">
+        </div>
+</div>
+
+<script>
+    const questions = [
+        "Você costuma transportar mais de 3 passageiros com frequência?",
+        "Você costuma dirigir em estradas de terra ou superfícies irregulares?",
+        "A economia de combustível é mais importante que a potência?",
+        "Você precisa de um porta-malas grande para viagens ou compras?",
+        "Você pretende usar o carro predominantemente dentro da cidade?",
+        "Você tem facilidade para carregar um carro na sua residência?",
+        "Você prefere dirigir em uma posição mais alta (estilo SUV)?",
+        "Você faz viagens de longa distância (mais de 400km) com frequência?",
+        "A facilidade de revenda futura é um fator decisivo?",
+        "Você faz questão de um painel 100% digital e comandos por voz?",
+        "Sistemas de direção autônoma são indispensáveis?",
+        "Você prefere um design esportivo em vez de um discreto?"
+    ];
+
+    let currentStep = 0;
+    const responses = [];
+
+    const questionWrapper = document.getElementById('questionWrapper');
+    const progressBar = document.getElementById('progressBar');
+    const stepCounter = document.getElementById('stepCounter');
+    const percentLabel = document.getElementById('percentLabel');
+    const btnBack = document.getElementById('btnBack');
+
+    function initWizard() {
+        renderQuestion();
+    }
+
+    function renderQuestion() {
+        questionWrapper.innerHTML = `
+            <div class="step active">
+                <h2>${questions[currentStep]}</h2>
+                <div class="btn-group">
+                    <button class="opt-btn yes" onclick="handleAnswer('Sim')">Sim</button>
+                    <button class="opt-btn" onclick="handleAnswer('Não')">Não</button>
+                </div>
+            </div>
+        `;
+        updateUI();
+    }
+
+    function handleAnswer(ans) {
+        responses[currentStep] = ans;
+        if (currentStep < questions.length - 1) {
+            currentStep++;
+            renderQuestion();
+        } else {
+            showLoader();
+        }
+    }
+
+    function changeStep(n) {
+        if ((currentStep + n) >= 0) {
+            currentStep += n;
+            renderQuestion();
+        }
+    }
+
+    function updateUI() {
+        const progress = ((currentStep) / questions.length) * 100;
+        progressBar.style.width = progress + '%';
+        percentLabel.innerText = Math.round(progress) + '%';
+        stepCounter.innerText = `Pergunta ${currentStep + 1} de ${questions.length}`;
+        btnBack.style.visibility = currentStep > 0 ? 'visible' : 'hidden';
+    }
+
+    function showLoader() {
+        document.getElementById('mainInterface').style.display = 'none';
+        document.getElementById('loader').style.display = 'block';
+
+        setTimeout(showResult, 3000);
+    }
+
+    function showResult() {
+        document.getElementById('loader').style.display = 'none';
+        const resultArea = document.getElementById('resultArea');
+        resultArea.classList.add('active');
+
+        let car = "";
+        let desc = "";
+
+        // Lógica de Recomendação simplificada
+        if (responses[5] === "Sim" && responses[4] === "Sim") {
+            car = "BYD Dolphin Mini / GWM Ora 03";
+            desc = "Sua rotina urbana e acesso à carga tornam você o candidato perfeito para um elétrico ágil e tecnológico.";
+        } else if (responses[6] === "Sim" || responses[1] === "Sim") {
+            car = "Hyundai Creta 2026 ou Toyota Corolla Cross";
+            desc = "Você valoriza conforto, altura e espaço. Um SUV moderno atenderá suas viagens e o uso diário.";
+        } else if (responses[2] === "Sim") {
+            car = "VW Polo ou Honda City";
+            desc = "Você busca eficiência e racionalidade. Estes modelos entregam o melhor custo-benefício por quilômetro rodado.";
+        } else {
+            car = "Audi A3 ou BYD Seal";
+            desc = "Pelo seu perfil, você busca performance e um design que se destaque na multidão.";
+        }
+
+        resultArea.innerHTML = `
+            <div class="result-card">
+                <p>MATCH ENCONTRADO!</p>
+                <h3>${car}</h3>
+                <p style="color: var(--text-dim)">${desc}</p>
+                <button class="opt-btn" style="margin-top:30px; width:100%;" onclick="location.reload()">Refazer Quiz</button>
+            </div>
+        `;
+    }
+
+    initWizard();
+</script>
+</body>
+</html>
