@@ -2,13 +2,19 @@
   <section class="account-hub-shell">
     <aside class="account-nav">
       <div class="profile-card">
-        <button type="button" class="avatar-button" aria-label="Upload profile photo">
-          <span class="avatar-placeholder">C</span>
+        <button type="button" class="avatar-button" aria-label="Upload profile photo" [disabled]="avatarLoading" (click)="avatarInput.click()">
+          <ng-container *ngIf="avatarPreview; else avatarFallback">
+            <img class="avatar-image" [src]="avatarPreview" alt="Foto do perfil" />
+          </ng-container>
+          <ng-template #avatarFallback>
+            <span class="avatar-placeholder">{{ displayName.charAt(0) || 'U' }}</span>
+          </ng-template>
           <span class="upload-hint">Upload</span>
         </button>
+        <input #avatarInput type="file" accept="image/*" class="avatar-input" (change)="onAvatarSelected($event)" />
         <div class="profile-meta">
-          <h2>Crystian</h2>
-          <p>@crystian</p>
+          <h2>{{ displayName }}</h2>
+          <p>{{ displayUsername }}</p>
         </div>
       </div>
 
@@ -33,6 +39,8 @@
         <p>Atualize seus dados de acesso e informações básicas da sua conta AutoMatch.</p>
       </header>
 
+      <p class="auth-error" *ngIf="error">{{ error }}</p>
+
       <form class="account-form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
         <div class="form-grid two-column">
           <label class="field">
@@ -42,7 +50,7 @@
 
           <label class="field">
             <span>Sobrenome</span>
-            <input type="text" formControlName="lastName" placeholder="Seu sobrenome" />
+            <input type="text" formControlName="surname" placeholder="Seu sobrenome" />
           </label>
         </div>
 
@@ -58,16 +66,9 @@
           </label>
         </div>
 
-        <div class="form-grid single-column">
-          <label class="field">
-            <span>Localização / Estado</span>
-            <input type="text" formControlName="location" placeholder="Ex.: São Paulo, SP" />
-          </label>
-        </div>
-
         <div class="form-actions">
-          <a routerLink="/home" class="cancel-link">Cancelar</a>
-          <app-shared-button variant="primary" type="submit">Salvar Alterações</app-shared-button>
+          <a routerLink="/inicio" class="cancel-link">Cancelar</a>
+          <app-shared-button variant="primary" type="submit" [disabled]="loading">Salvar Alterações</app-shared-button>
         </div>
       </form>
     </section>

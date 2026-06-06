@@ -6,7 +6,7 @@
         <p>Painel de controle</p>
       </div>
       <nav class="menu">
-        <a routerLink="/admin" routerLinkActive="is-active" [routerLinkActiveOptions]="{ exact: true }" class="menu-item">
+        <a routerLink="/administracao" routerLinkActive="is-active" [routerLinkActiveOptions]="{ exact: true }" class="menu-item">
           <span class="menu-icon">📊</span>
           <span class="menu-label">Dashboard</span>
         </a>
@@ -18,7 +18,7 @@
           <span class="menu-icon">👥</span>
           <span class="menu-label">Gerenciar Usuários</span>
         </a>
-        <a routerLink="/home" class="menu-item">
+        <a routerLink="/inicio" class="menu-item">
           <span class="menu-icon">←</span>
           <span class="menu-label">Voltar ao Site</span>
         </a>
@@ -47,7 +47,7 @@
           <tbody>
             <tr *ngFor="let user of users; trackBy: trackByUserId">
               <td>
-                <strong>{{ user.fullName }}</strong>
+                <strong>{{ user.firstName }} {{ user.surname }}</strong>
                 <span class="self-badge" *ngIf="isSelf(user.id)">(você)</span>
               </td>
               <td>{{ user.email }}</td>

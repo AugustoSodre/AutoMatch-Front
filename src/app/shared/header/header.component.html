@@ -1,7 +1,7 @@
 <header>
   <nav class="navbar">
     <div class="container">
-      <a routerLink="/home" class="brand">
+      <a routerLink="/inicio" class="brand">
         <span class="logo">🚗</span>
         <span class="brand-text">AutoMatch</span>
       </a>
@@ -11,24 +11,24 @@
         <span class="bar"></span>
       </button>
       <ul class="nav-links" [class.is-open]="isOpen" id="primary-navigation">
-        <li><a (click)="closeMenu()" [routerLink]="['/home']" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a></li>
-        <li><a (click)="closeMenu()" [routerLink]="['/about']" routerLinkActive="active">Sobre</a></li>
+        <li><a (click)="closeMenu()" [routerLink]="['/inicio']" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Início</a></li>
+        <li><a (click)="closeMenu()" [routerLink]="['/sobre']" routerLinkActive="active">Sobre</a></li>
 
         <ng-container *ngIf="auth.isAuthenticated()">
           <li><a (click)="closeMenu()" [routerLink]="['/novo-match']" routerLinkActive="active">Novo match</a></li>
-          <li><a (click)="closeMenu()" [routerLink]="['/profile']" routerLinkActive="active">Perfil</a></li>
+          <li><a (click)="closeMenu()" [routerLink]="['/perfil']" routerLinkActive="active">Perfil</a></li>
           <li><a (click)="closeMenu()" [routerLink]="['/comparar']" routerLinkActive="active">Comparar</a></li>
           <li><a (click)="closeMenu()" [routerLink]="['/matches']" routerLinkActive="active">Meus matches</a></li>
-          <li *ngIf="auth.isAdmin()"><a (click)="closeMenu()" [routerLink]="['/admin']" routerLinkActive="active">Admin</a></li>
+          <li *ngIf="auth.isAdmin()"><a (click)="closeMenu()" [routerLink]="['/administracao']" routerLinkActive="active">Admin</a></li>
           <li class="nav-user">
-            <span class="user-name">{{ auth.getUser()?.fullName }}</span>
+            <span class="user-name">{{ auth.getDisplayName() }}</span>
             <a (click)="logout()" class="logout-link">Sair</a>
           </li>
         </ng-container>
 
         <ng-container *ngIf="!auth.isAuthenticated()">
-          <li><a (click)="closeMenu()" [routerLink]="['/login']" routerLinkActive="active">Entrar</a></li>
-          <li><a (click)="closeMenu()" [routerLink]="['/register']" routerLinkActive="active">Cadastrar</a></li>
+          <li><a (click)="closeMenu()" [routerLink]="['/entrar']" routerLinkActive="active">Entrar</a></li>
+          <li><a (click)="closeMenu()" [routerLink]="['/registrar']" routerLinkActive="active">Cadastrar</a></li>
         </ng-container>
       </ul>
     </div>

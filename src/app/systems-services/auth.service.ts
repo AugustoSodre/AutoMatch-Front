@@ -5,9 +5,11 @@ import { environment } from '../../environments/environment';
 
 export interface UserData {
   id: string;
-  fullName: string;
+  firstName: string;
+  surname: string;
   email: string;
   role: string;
+  avatarUrl: string;
 }
 
 export interface AuthResponse {
@@ -21,9 +23,21 @@ export interface LoginData {
 }
 
 export interface RegisterData {
-  fullName: string;
+  firstName: string;
+  surname: string;
   email: string;
   password: string;
+}
+
+export interface UpdateProfileData {
+  firstName: string;
+  surname: string;
+  email: string;
+  password?: string;
+}
+
+export interface UpdateAvatarData {
+  avatarUrl: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -46,6 +60,18 @@ export class AuthService {
     );
   }
 
+  public updateProfile(data: UpdateProfileData): Observable<{ user: UserData }> {
+    return this.http.put<{ user: UserData }>(`${this.apiUrl}/me`, data).pipe(
+      tap((res) => this.setUser(res.user))
+    );
+  }
+
+  public updateAvatar(data: UpdateAvatarData): Observable<{ user: UserData }> {
+    return this.http.put<{ user: UserData }>(`${this.apiUrl}/me/avatar`, data).pipe(
+      tap((res) => this.setUser(res.user))
+    );
+  }
+
   public getToken(): string | null {
     return localStorage.getItem(this.tokenKey);
   }
@@ -54,10 +80,24 @@ export class AuthService {
     const raw = localStorage.getItem(this.userKey);
     if (!raw) return null;
     try {
-      return JSON.parse(raw) as UserData;
+      return this.normalizeUser(JSON.parse(raw) as Partial<UserData> & { fullName?: string });
     } catch {
       return null;
     }
+  }
+
+  public getDisplayName(user: UserData | null = this.getUser()): string {
+    if (!user) {
+      return 'Usuário';
+    }
+
+    const displayName = [user.firstName, user.surname]
+      .map((part) => part.trim())
+      .filter(Boolean)
+      .join(' ')
+      .trim();
+
+    return displayName || 'Usuário';
   }
 
   public isAuthenticated(): boolean {
@@ -75,6 +115,24 @@ export class AuthService {
 
   private setSession(res: AuthResponse): void {
     localStorage.setItem(this.tokenKey, res.token);
-    localStorage.setItem(this.userKey, JSON.stringify(res.user));
+    this.setUser(res.user);
+  }
+
+  private setUser(user: UserData | (Partial<UserData> & { fullName?: string })): void {
+    localStorage.setItem(this.userKey, JSON.stringify(this.normalizeUser(user)));
+  }
+
+  private normalizeUser(user: Partial<UserData> & { fullName?: string }): UserData {
+    const fullName = user.fullName?.trim() ?? '';
+    const parts = fullName.split(/\s+/).filter(Boolean);
+
+    return {
+      id: String(user.id ?? ''),
+      firstName: String(user.firstName ?? parts[0] ?? '').trim(),
+      surname: String(user.surname ?? parts.slice(1).join(' ') ?? '').trim(),
+      email: String(user.email ?? ''),
+      role: String(user.role ?? 'USER'),
+      avatarUrl: String(user.avatarUrl ?? '')
+    };
   }
 }

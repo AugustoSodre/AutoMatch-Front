@@ -34,75 +34,11 @@
     </header>
 
     <form class="wizard-form" [formGroup]="form" (ngSubmit)="handlePrimaryAction()" novalidate>
-      <section class="wizard-panel" *ngIf="currentStep === 1">
+      <!-- Perfil & orçamento removed: priorities is now step 1 -->
+
+      <section class="wizard-panel two-column-layout" *ngIf="currentStep === 1">
         <div class="panel-copy">
           <p class="panel-label">Passo 1</p>
-          <h2>Perfil &amp; orçamento</h2>
-          <p>Preencha seus dados e a faixa de preço para personalizar a busca com precisão.</p>
-        </div>
-
-        <div class="form-grid" formGroupName="profile">
-          <label class="field span-6">
-            <span>Nome completo</span>
-            <input type="text" formControlName="fullName" placeholder="Seu nome completo" />
-          </label>
-
-          <label class="field span-6">
-            <span>Email</span>
-            <input type="email" formControlName="email" placeholder="you@exemplo.com" />
-          </label>
-
-          <label class="field span-12">
-            <span>Estado</span>
-            <input type="text" formControlName="state" placeholder="Ex.: São Paulo, SP" />
-          </label>
-        </div>
-
-        <div class="budget-card" formGroupName="budget">
-          <div class="budget-head">
-            <div>
-              <p class="panel-label">Faixa de preço</p>
-              <h3>Selecione o intervalo ideal para o seu orçamento</h3>
-            </div>
-            <div class="budget-badges">
-              <span>{{ formatBudget(budgetMin) }}</span>
-              <span>{{ formatBudget(budgetMax) }}</span>
-            </div>
-          </div>
-
-          <div class="range-slider">
-            <div class="range-track" [style.background]="budgetTrackBackground"></div>
-
-            <input
-              #minBudget
-              type="range"
-              formControlName="min"
-              [min]="budgetFloor"
-              [max]="budgetCeiling"
-              [step]="budgetStep"
-              [value]="budgetMin"
-              (input)="onBudgetMinChange(minBudget.value)"
-              aria-label="Valor mínimo do orçamento"
-            />
-
-            <input
-              #maxBudget
-              type="range"
-              formControlName="max"
-              [min]="budgetFloor"
-              [max]="budgetCeiling"
-              [step]="budgetStep"
-              [value]="budgetMax"
-              (input)="onBudgetMaxChange(maxBudget.value)"
-              aria-label="Valor máximo do orçamento"
-            />
-          </div>
-        </div>
-      </section>
-
-      <section class="wizard-panel two-column-layout" *ngIf="currentStep === 2">
-        <div class="panel-copy">
-          <p class="panel-label">Passo 2</p>
           <h2>Prioridades &amp; atributos</h2>
           <p>Escolha os atributos que mais importam para você e arraste para ordenar por prioridade.</p>
         </div>
@@ -167,9 +103,9 @@
         </div>
       </section>
 
-      <section class="wizard-panel" *ngIf="currentStep === 3">
+      <section class="wizard-panel" *ngIf="currentStep === 2">
         <div class="panel-copy">
-          <p class="panel-label">Passo 3</p>
+          <p class="panel-label">Passo 2</p>
           <h2>Categoria &amp; must-haves</h2>
           <p>Selecione múltiplas categorias visuais e conclua com seus must-haves para gerar o match.</p>
         </div>
@@ -206,6 +142,25 @@
         </div>
       </section>
 
+      <section class="wizard-panel" *ngIf="currentStep === 3">
+        <div class="panel-copy">
+          <p class="panel-label">Passo 3</p>
+          <h2>Resumo e Confirmação</h2>
+          <p>Revise suas escolhas antes de gerar o match.</p>
+        </div>
+
+        <div class="wizard-summary">
+          <div>
+            <p class="panel-label">Categorias</p>
+            <h3>{{ selectedCategories.length }} categoria(s) selecionada(s)</h3>
+          </div>
+          <div>
+            <p class="panel-label">Prioridades</p>
+            <h3>{{ selectedPriorities.length }} atributo(s) no ranking</h3>
+          </div>
+        </div>
+      </section>
+
       <div class="wizard-actions">
         <app-shared-button variant="secondary" type="button" (buttonClick)="goBack()" [disabled]="currentStep === 1 || isCalculating">
           Voltar
@@ -220,10 +175,10 @@
   </section>
 
   <div *ngIf="isCalculating" class="loading-overlay" role="status" aria-live="polite" aria-label="Carregando resultados">
-    <div class="loading-card">
+      <div class="loading-card">
       <div class="spinner"></div>
       <h3>AutoMatch está calculando seus matches...</h3>
-      <p>Cruzando perfil, orçamento, prioridades e categorias para gerar as melhores sugestões.</p>
+      <p>Cruzando prioridades e categorias para gerar as melhores sugestões.</p>
       <div class="progress-dots">
         <span class="dot"></span>
         <span class="dot"></span>

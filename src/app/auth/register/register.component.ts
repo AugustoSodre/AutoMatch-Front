@@ -19,14 +19,19 @@ export class RegisterComponent implements OnInit {
     private readonly router: Router
   ) {
     this.form = this.fb.group({
-      fullName: ['', [Validators.required, Validators.minLength(2)]],
+      firstName: ['', [Validators.required, Validators.minLength(2)]],
+      surname: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
 
-  public get fullNameControl(): FormControl {
-    return this.form.get('fullName') as FormControl;
+  public get firstNameControl(): FormControl {
+    return this.form.get('firstName') as FormControl;
+  }
+
+  public get surnameControl(): FormControl {
+    return this.form.get('surname') as FormControl;
   }
 
   public get emailControl(): FormControl {
@@ -46,7 +51,7 @@ export class RegisterComponent implements OnInit {
       this.authService.register(this.form.value).subscribe({
         next: () => {
           this.loading = false;
-          this.router.navigate(['/home']);
+          this.router.navigate(['/inicio']);
         },
         error: (err) => {
           this.loading = false;

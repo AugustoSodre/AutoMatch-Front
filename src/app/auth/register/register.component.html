@@ -6,7 +6,8 @@
 
       <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
         <div class="auth-error" *ngIf="error">{{ error }}</div>
-        <app-form-input label="Nome completo" [control]="fullNameControl" placeholder="Seu nome completo"></app-form-input>
+        <app-form-input label="Nome" [control]="firstNameControl" placeholder="Seu nome"></app-form-input>
+        <app-form-input label="Sobrenome" [control]="surnameControl" placeholder="Seu sobrenome"></app-form-input>
         <app-form-input label="Email" type="email" [control]="emailControl" placeholder="you@exemplo.com"></app-form-input>
         <app-form-input label="Senha" type="password" [control]="passwordControl" placeholder="Mínimo 6 caracteres"></app-form-input>
 
@@ -14,7 +15,7 @@
       </form>
 
       <div class="auth-footer">
-        <p>Já tem uma conta? <a routerLink="/login">Faça Log in</a></p>
+        <p>Já tem uma conta? <a routerLink="/entrar">Faça Log in</a></p>
         <div class="or">OU</div>
         <div class="socials">
           <button class="social"><span class="icon">G</span> Entre com Google</button>

@@ -3,10 +3,16 @@
     <h1>Editar Perfil</h1>
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+      <div class="auth-error" *ngIf="error">{{ error }}</div>
       <div class="fields">
         <label class="field">
-          <span>Nome completo</span>
-          <input type="text" formControlName="fullName" placeholder="Seu nome completo" />
+          <span>Nome</span>
+          <input type="text" formControlName="firstName" placeholder="Seu nome" />
+        </label>
+
+        <label class="field">
+          <span>Sobrenome</span>
+          <input type="text" formControlName="surname" placeholder="Seu sobrenome" />
         </label>
 
         <label class="field">
@@ -18,16 +24,11 @@
           <span>Senha</span>
           <input type="password" formControlName="password" placeholder="Sua senha" />
         </label>
-
-        <label class="field">
-          <span>Estado</span>
-          <input type="text" formControlName="state" placeholder="Ex.: São Paulo" />
-        </label>
       </div>
 
       <div class="actions">
-        <app-shared-button variant="primary" type="submit">Salvar Alterações</app-shared-button>
-        <a routerLink="/home" class="cancel-link">Cancelar</a>
+        <app-shared-button variant="primary" type="submit" [disabled]="loading">Salvar Alterações</app-shared-button>
+        <a routerLink="/inicio" class="cancel-link">Cancelar</a>
       </div>
     </form>
   </section>

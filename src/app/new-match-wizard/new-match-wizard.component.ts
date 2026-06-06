@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { MockImageService } from '../systems-services';
 import { SharedModule } from '../shared/shared.module';
@@ -20,22 +20,13 @@ interface AttributeCard {
 }
 
 interface CategoryCard {
-  id: 'aventura' | 'luxo' | 'familia';
+  id: 'populares' | 'aventura' | 'luxo' | 'familia';
   label: string;
   description: string;
   imageUrl: string;
 }
 
 interface WizardPayload {
-  profile: {
-    fullName: string;
-    email: string;
-    state: string;
-  };
-  budget: {
-    min: number;
-    max: number;
-  };
   priorities: string[];
   categories: string[];
 }
@@ -50,9 +41,9 @@ interface WizardPayload {
 })
 export class NewMatchWizardComponent implements OnInit {
   public readonly wizardSteps: ReadonlyArray<WizardStep> = [
-    { number: 1, title: 'Perfil & Orçamento', description: 'Dados básicos e faixa de preço' },
-    { number: 2, title: 'Prioridades', description: 'Ordene os atributos mais importantes' },
-    { number: 3, title: 'Categorias', description: 'Escolha os estilos desejados' }
+    { number: 1, title: 'Prioridades', description: 'Ordene os atributos mais importantes' },
+    { number: 2, title: 'Categorias', description: 'Escolha os estilos desejados' },
+    { number: 3, title: 'Resumo', description: 'Confirme e gere seu match' }
   ];
 
   public readonly attributeCards: ReadonlyArray<AttributeCard> = [
@@ -65,9 +56,7 @@ export class NewMatchWizardComponent implements OnInit {
   ];
 
   public readonly categoryCards: ReadonlyArray<CategoryCard>;
-  public readonly budgetFloor = 30000;
-  public readonly budgetCeiling = 300000;
-  public readonly budgetStep = 5000;
+  // budget removed from wizard
 
   public currentStep: 1 | 2 | 3 = 1;
   public isCalculating = false;
@@ -75,16 +64,7 @@ export class NewMatchWizardComponent implements OnInit {
 
   public readonly form: FormGroup;
 
-  private readonly budgetRangeValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
-    const minValue = Number(control.get('min')?.value);
-    const maxValue = Number(control.get('max')?.value);
-
-    if (!Number.isFinite(minValue) || !Number.isFinite(maxValue) || minValue <= maxValue) {
-      return null;
-    }
-
-    return { budgetRange: true };
-  };
+  // budget validator removed
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -95,6 +75,12 @@ export class NewMatchWizardComponent implements OnInit {
     const categoryImages = this.mockImageService.getCategoryImages();
 
     this.categoryCards = [
+      {
+        id: 'populares',
+        label: 'Populares',
+        description: 'Modelos mais procurados e testados pela comunidade',
+        imageUrl: categoryImages.populares
+      },
       {
         id: 'aventura',
         label: 'Aventura',
@@ -116,18 +102,6 @@ export class NewMatchWizardComponent implements OnInit {
     ];
 
     this.form = this.formBuilder.group({
-      profile: this.formBuilder.group({
-        fullName: ['', [Validators.required, Validators.minLength(2)]],
-        email: ['', [Validators.required, Validators.email]],
-        state: ['', [Validators.required, Validators.minLength(2)]]
-      }),
-      budget: this.formBuilder.group(
-        {
-          min: [65000, [Validators.required]],
-          max: [180000, [Validators.required]]
-        },
-        { validators: [this.budgetRangeValidator] }
-      ),
       priorities: this.formBuilder.control<string[]>(['economia', 'seguranca', 'potencia'], [Validators.required, Validators.minLength(1)]),
       categories: this.formBuilder.control<string[]>([], [Validators.required, Validators.minLength(1)])
     });
@@ -135,13 +109,7 @@ export class NewMatchWizardComponent implements OnInit {
 
   public ngOnInit(): void {}
 
-  public get profileGroup(): FormGroup {
-    return this.form.get('profile') as FormGroup;
-  }
-
-  public get budgetGroup(): FormGroup {
-    return this.form.get('budget') as FormGroup;
-  }
+  // profile and budget groups removed
 
   public get prioritiesControl(): FormControl<string[]> {
     return this.form.get('priorities') as FormControl<string[]>;
@@ -159,35 +127,21 @@ export class NewMatchWizardComponent implements OnInit {
     return [...(this.categoriesControl.value ?? [])];
   }
 
-  public get budgetMin(): number {
-    return Number(this.budgetGroup.get('min')?.value ?? this.budgetFloor);
-  }
-
-  public get budgetMax(): number {
-    return Number(this.budgetGroup.get('max')?.value ?? this.budgetCeiling);
-  }
-
-  public get budgetTrackBackground(): string {
-    const minPercent = this.valueToPercent(this.budgetMin);
-    const maxPercent = this.valueToPercent(this.budgetMax);
-
-    return `linear-gradient(to right, rgba(31, 41, 55, 1) 0%, rgba(31, 41, 55, 1) ${minPercent}%, #f39c12 ${minPercent}%, #f39c12 ${maxPercent}%, rgba(31, 41, 55, 1) ${maxPercent}%, rgba(31, 41, 55, 1) 100%)`;
-  }
-
   public get activeStepTitle(): string {
     return this.wizardSteps.find((step: WizardStep) => step.number === this.currentStep)?.title ?? '';
   }
 
   public get isStepOneComplete(): boolean {
-    return this.profileGroup.valid && this.budgetGroup.valid;
-  }
-
-  public get isStepTwoComplete(): boolean {
     return this.prioritiesControl.valid && this.selectedPriorities.length > 0;
   }
 
-  public get isStepThreeComplete(): boolean {
+  public get isStepTwoComplete(): boolean {
     return this.categoriesControl.valid && this.selectedCategories.length > 0;
+  }
+
+  public get isStepThreeComplete(): boolean {
+    // final confirmation step - allow if previous steps are complete
+    return this.isStepOneComplete && this.isStepTwoComplete;
   }
 
   public get canProceed(): boolean {
@@ -307,7 +261,6 @@ export class NewMatchWizardComponent implements OnInit {
   public getAttributeLabel(attributeId: string): string {
     return this.attributeCards.find((attribute: AttributeCard) => attribute.id === attributeId)?.label ?? attributeId;
   }
-
   public getPriorityHint(index: number): string {
     if (index === 0) {
       return 'Must have';
@@ -320,20 +273,8 @@ export class NewMatchWizardComponent implements OnInit {
     return 'Considerar';
   }
 
-  public getProfileControl(name: 'fullName' | 'email' | 'state'): AbstractControl | null {
-    return this.profileGroup.get(name);
-  }
-
-  public budgetControl(name: 'min' | 'max'): AbstractControl | null {
-    return this.budgetGroup.get(name);
-  }
-
-  public formatBudget(value: number): string {
-    return `R$ ${value.toLocaleString('pt-BR')}`;
-  }
-
   public completeLabel(): string {
-    return 'AutoMatch is calculating your ideal matches...';
+    return 'AutoMatch está calculando seus matches ideais...';
   }
 
   private submitWizard(): void {
@@ -343,15 +284,6 @@ export class NewMatchWizardComponent implements OnInit {
     }
 
     const payload: WizardPayload = {
-      profile: {
-        fullName: String(this.getProfileControl('fullName')?.value ?? ''),
-        email: String(this.getProfileControl('email')?.value ?? ''),
-        state: String(this.getProfileControl('state')?.value ?? '')
-      },
-      budget: {
-        min: this.budgetMin,
-        max: this.budgetMax
-      },
       priorities: this.selectedPriorities,
       categories: this.selectedCategories
     };
@@ -368,8 +300,7 @@ export class NewMatchWizardComponent implements OnInit {
 
   private markCurrentStepTouched(): void {
     if (this.currentStep === 1) {
-      this.profileGroup.markAllAsTouched();
-      this.budgetGroup.markAllAsTouched();
+      this.prioritiesControl.markAsTouched();
     }
 
     if (this.currentStep === 2) {
@@ -381,22 +312,7 @@ export class NewMatchWizardComponent implements OnInit {
     }
   }
 
-  private valueToPercent(value: number): number {
-    const clamped = Math.min(Math.max(value, this.budgetFloor), this.budgetCeiling);
-    return ((clamped - this.budgetFloor) / (this.budgetCeiling - this.budgetFloor)) * 100;
-  }
-
-  public onBudgetMinChange(rawValue: string): void {
-    const nextMin = Number(rawValue);
-    const safeMin = Math.min(Math.max(nextMin, this.budgetFloor), this.budgetMax);
-    this.budgetGroup.get('min')?.setValue(safeMin);
-  }
-
-  public onBudgetMaxChange(rawValue: string): void {
-    const nextMax = Number(rawValue);
-    const safeMax = Math.max(Math.min(nextMax, this.budgetCeiling), this.budgetMin);
-    this.budgetGroup.get('max')?.setValue(safeMax);
-  }
+  // budget helpers removed
 
   public trackByStep(index: number, step: WizardStep): number {
     return step.number;

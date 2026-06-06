@@ -5,9 +5,11 @@ import { AuthService } from '../../systems-services/auth.service';
 
 interface User {
   id: string;
-  fullName: string;
+  firstName: string;
+  surname: string;
   email: string;
   role: string;
+  avatarUrl: string;
   createdAt: string;
 }
 
@@ -46,7 +48,7 @@ export class AdminUsersComponent implements OnInit {
   public toggleRole(user: User): void {
     const newRole = user.role === 'ADMIN' ? 'USER' : 'ADMIN';
     const action = newRole === 'ADMIN' ? 'Tornar administrador' : 'Remover administrador';
-    const msg = `${action} ${user.fullName}?`;
+    const msg = `${action} ${this.authService.getDisplayName(user)}?`;
 
     if (!confirm(msg)) return;
 
