@@ -2,9 +2,9 @@
   <section class="wizard-shell">
     <header class="wizard-hero">
       <div class="hero-copy">
-        <p class="eyebrow">Novo Match</p>
-        <h1>Encontre o carro ideal em poucos passos</h1>
-        <p>Um fluxo guiado, limpo e rápido para transformar preferências em um match automotivo de alta precisão.</p>
+        <p class="eyebrow">AutoMatch AI</p>
+        <h1>Descubra o carro perfeito para você</h1>
+        <p>Nosso algoritmo de IA precisa de alguns dados para encontrar o match ideal.</p>
       </div>
 
       <div class="wizard-progress" aria-label="Progresso do wizard">
@@ -20,170 +20,325 @@
             [class.is-active]="step.number === currentStep"
             [class.is-complete]="step.number < currentStep"
             (click)="goToStep(step.number)"
-            [attr.aria-current]="step.number === currentStep ? 'step' : undefined"
-            [attr.aria-label]="'Passo ' + step.number + ': ' + step.title + ' - ' + step.description"
           >
-            <span class="step-number" aria-hidden="true">{{ step.number }}</span>
+            <span class="step-number">{{ step.number }}</span>
             <span class="step-copy">
               <strong>{{ step.title }}</strong>
-              <small>{{ step.description }}</small>
             </span>
           </button>
         </div>
       </div>
     </header>
 
-    <form class="wizard-form" [formGroup]="form" (ngSubmit)="handlePrimaryAction()" novalidate>
-      <!-- Perfil & orçamento removed: priorities is now step 1 -->
+    <form class="wizard-form" [formGroup]="form" (ngSubmit)="goNext()" novalidate>
 
-      <section class="wizard-panel two-column-layout" *ngIf="currentStep === 1">
+      <!-- ETAPA 1: DEMOGRAFIA E USO -->
+      <section class="wizard-panel" *ngIf="currentStep === 1" formGroupName="demographics">
         <div class="panel-copy">
           <p class="panel-label">Passo 1</p>
-          <h2>Prioridades &amp; atributos</h2>
-          <p>Escolha os atributos que mais importam para você e arraste para ordenar por prioridade.</p>
+          <h2>Perfil e Uso</h2>
+          <p>Conte-nos como será o dia a dia com seu novo veículo.</p>
         </div>
 
-        <div class="attributes-column">
-          <div class="attribute-grid">
-            <button
-              *ngFor="let attribute of attributeCards; trackBy: trackByAttribute"
-              type="button"
-              class="attribute-card"
-              [class.is-selected]="isPrioritySelected(attribute.id)"
-              (click)="togglePriority(attribute.id)"
-              [attr.aria-pressed]="isPrioritySelected(attribute.id)"
-              [attr.aria-label]="attribute.label + ' - ' + attribute.description"
-            >
-              <span class="attribute-icon" aria-hidden="true">{{ attribute.icon }}</span>
-              <strong>{{ attribute.label }}</strong>
-              <small>{{ attribute.description }}</small>
-            </button>
-          </div>
-        </div>
-
-        <div class="priority-column">
-          <div class="priority-card">
-            <div class="priority-head">
-              <div>
-                <p class="panel-label">Priority sort</p>
-                <h3>Arraste para definir o que é obrigatório</h3>
-              </div>
-              <span class="priority-counter">{{ selectedPriorities.length }} itens</span>
-            </div>
-
-            <ul class="priority-list" *ngIf="selectedPriorities.length > 0; else emptyPriorities" role="list">
-              <li
-                *ngFor="let attributeId of selectedPriorities; let index = index; trackBy: trackByPriority"
-                role="listitem"
-                draggable="true"
-                (dragstart)="onPriorityDragStart(index)"
-                (dragover)="onPriorityDragOver($event, index)"
-                (drop)="onPriorityDrop()"
-                (dragend)="onPriorityDragEnd()"
-                [class.is-dragging]="draggedPriorityIndex === index"
-                [attr.aria-dropeffect]="'move'"
-                [attr.aria-label]="'Prioridade ' + (index + 1) + ': ' + getAttributeLabel(attributeId) + ' - ' + getPriorityHint(index)"
-              >
-                <span class="priority-rank" aria-hidden="true">{{ index + 1 }}</span>
-                <div class="priority-copy">
-                  <strong>{{ getAttributeLabel(attributeId) }}</strong>
-                  <small>{{ getPriorityHint(index) }}</small>
+        <div class="form-sections">
+          <div class="form-section">
+            <label class="section-title">Tamanho da Família</label>
+            <div class="selection-grid">
+              <label class="selection-card" [class.is-selected]="form.get('demographics.familySize')?.value === '1'">
+                <input type="radio" formControlName="familySize" value="1">
+                <div class="card-content">
+                  <span class="card-icon">👤</span>
+                  <span class="card-text">1 pessoa</span>
                 </div>
-                <span class="drag-handle" aria-label="Arrastar para reordenar">⠿</span>
-              </li>
-            </ul>
+              </label>
+              <label class="selection-card" [class.is-selected]="form.get('demographics.familySize')?.value === '2'">
+                <input type="radio" formControlName="familySize" value="2">
+                <div class="card-content">
+                  <span class="card-icon">👥</span>
+                  <span class="card-text">2 pessoas</span>
+                </div>
+              </label>
+              <label class="selection-card" [class.is-selected]="form.get('demographics.familySize')?.value === '3-4'">
+                <input type="radio" formControlName="familySize" value="3-4">
+                <div class="card-content">
+                  <span class="card-icon">👨‍👩‍👧</span>
+                  <span class="card-text">3-4 pessoas</span>
+                </div>
+              </label>
+              <label class="selection-card" [class.is-selected]="form.get('demographics.familySize')?.value === '5+'">
+                <input type="radio" formControlName="familySize" value="5+">
+                <div class="card-content">
+                  <span class="card-icon">👨‍👩‍👧‍👦</span>
+                  <span class="card-text">5+ pessoas</span>
+                </div>
+              </label>
+            </div>
+          </div>
 
-            <ng-template #emptyPriorities>
-              <div class="empty-state">
-                <strong>Sem prioridades ainda</strong>
-                <p>Clique nos cards ao lado para montar sua ordem de decisão.</p>
-              </div>
-            </ng-template>
+          <div class="form-section">
+            <label class="section-title">Uso Principal</label>
+            <div class="selection-grid">
+              <label class="selection-card" [class.is-selected]="form.get('demographics.primaryUse')?.value === 'work_commute'">
+                <input type="radio" formControlName="primaryUse" value="work_commute">
+                <div class="card-content">
+                  <span class="card-icon">🏢</span>
+                  <span class="card-text">Trabalho / Trânsito</span>
+                </div>
+              </label>
+              <label class="selection-card" [class.is-selected]="form.get('demographics.primaryUse')?.value === 'travel'">
+                <input type="radio" formControlName="primaryUse" value="travel">
+                <div class="card-content">
+                  <span class="card-icon">✈️</span>
+                  <span class="card-text">Viagens</span>
+                </div>
+              </label>
+              <label class="selection-card" [class.is-selected]="form.get('demographics.primaryUse')?.value === 'ride_hailing'">
+                <input type="radio" formControlName="primaryUse" value="ride_hailing">
+                <div class="card-content">
+                  <span class="card-icon">🚗</span>
+                  <span class="card-text">Uber / 99</span>
+                </div>
+              </label>
+              <label class="selection-card" [class.is-selected]="form.get('demographics.primaryUse')?.value === 'off_road'">
+                <input type="radio" formControlName="primaryUse" value="off_road">
+                <div class="card-content">
+                  <span class="card-icon">⛰️</span>
+                  <span class="card-text">Off-road</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <label class="section-title">Ambiente Principal</label>
+            <div class="selection-grid">
+              <label class="selection-card" [class.is-selected]="form.get('demographics.primaryEnvironment')?.value === 'city'">
+                <input type="radio" formControlName="primaryEnvironment" value="city">
+                <div class="card-content">
+                  <span class="card-icon">🏙️</span>
+                  <span class="card-text">Cidade</span>
+                </div>
+              </label>
+              <label class="selection-card" [class.is-selected]="form.get('demographics.primaryEnvironment')?.value === 'highway'">
+                <input type="radio" formControlName="primaryEnvironment" value="highway">
+                <div class="card-content">
+                  <span class="card-icon">🛣️</span>
+                  <span class="card-text">Rodovia</span>
+                </div>
+              </label>
+              <label class="selection-card" [class.is-selected]="form.get('demographics.primaryEnvironment')?.value === 'dirt_road'">
+                <input type="radio" formControlName="primaryEnvironment" value="dirt_road">
+                <div class="card-content">
+                  <span class="card-icon">🚜</span>
+                  <span class="card-text">Terra / Rural</span>
+                </div>
+              </label>
+            </div>
           </div>
         </div>
       </section>
 
-      <section class="wizard-panel" *ngIf="currentStep === 2">
+      <!-- ETAPA 2: CAPACIDADE FINANCEIRA -->
+      <section class="wizard-panel" *ngIf="currentStep === 2" formGroupName="financials">
         <div class="panel-copy">
           <p class="panel-label">Passo 2</p>
-          <h2>Categoria &amp; must-haves</h2>
-          <p>Selecione múltiplas categorias visuais e conclua com seus must-haves para gerar o match.</p>
+          <h2>Capacidade Financeira</h2>
+          <p>Defina seus limites para filtrarmos as melhores opções.</p>
         </div>
 
-        <div class="category-grid" role="group" aria-label="Seleção de categorias">
-          <button
-            *ngFor="let category of categoryCards; trackBy: trackByCategory"
-            type="button"
-            class="category-card"
-            [class.is-selected]="isCategorySelected(category.id)"
-            (click)="toggleCategory(category.id)"
-            [attr.aria-pressed]="isCategorySelected(category.id)"
-            [attr.aria-label]="category.label + ' - ' + category.description"
-          >
-            <img [src]="category.imageUrl" [alt]="category.label" loading="lazy" />
-            <div class="category-overlay"></div>
-            <div class="category-copy">
-              <strong>{{ category.label }}</strong>
-              <p>{{ category.description }}</p>
+        <div class="form-sections">
+          <div class="form-section">
+            <label class="section-title" for="maxBudget">Orçamento Máximo (R$)</label>
+            <div class="budget-input-wrapper">
+              <span class="currency-symbol">R$</span>
+              <input type="number" id="maxBudget" formControlName="maxBudget" placeholder="Ex: 80.000" class="form-input-large">
             </div>
-            <span class="category-check" aria-hidden="true">✓</span>
-          </button>
-        </div>
-
-        <div class="wizard-summary">
-          <div>
-            <p class="panel-label">Resumo</p>
-            <h3>{{ selectedCategories.length }} categoria(s) selecionada(s)</h3>
+            <div *ngIf="form.get('financials.maxBudget')?.touched && form.get('financials.maxBudget')?.invalid" class="error-msg">
+              O orçamento é obrigatório e deve ser maior que R$ 1.000.
+            </div>
           </div>
-          <div>
-            <p class="panel-label">Prioridades</p>
-            <h3>{{ selectedPriorities.length }} atributo(s) no ranking</h3>
+
+          <div class="form-section">
+            <label class="section-title">Tolerância a Custos Mensais (IPVA/Seguro/Manutenção)</label>
+            <div class="selection-grid">
+              <label class="selection-card" [class.is-selected]="form.get('financials.costTolerance')?.value === 'low'">
+                <input type="radio" formControlName="costTolerance" value="low">
+                <div class="card-content">
+                  <span class="card-icon">📉</span>
+                  <span class="card-text">Baixa</span>
+                </div>
+              </label>
+              <label class="selection-card" [class.is-selected]="form.get('financials.costTolerance')?.value === 'medium'">
+                <input type="radio" formControlName="costTolerance" value="medium">
+                <div class="card-content">
+                  <span class="card-icon">📊</span>
+                  <span class="card-text">Média</span>
+                </div>
+              </label>
+              <label class="selection-card" [class.is-selected]="form.get('financials.costTolerance')?.value === 'high'">
+                <input type="radio" formControlName="costTolerance" value="high">
+                <div class="card-content">
+                  <span class="card-icon">📈</span>
+                  <span class="card-text">Alta</span>
+                </div>
+              </label>
+            </div>
           </div>
         </div>
       </section>
 
-      <section class="wizard-panel" *ngIf="currentStep === 3">
+      <!-- ETAPA 3: PREFERÊNCIAS TÉCNICAS -->
+      <section class="wizard-panel" *ngIf="currentStep === 3" formGroupName="technicalPreferences">
         <div class="panel-copy">
           <p class="panel-label">Passo 3</p>
-          <h2>Resumo e Confirmação</h2>
-          <p>Revise suas escolhas antes de gerar o match.</p>
+          <h2>Preferências Técnicas</h2>
+          <p>Quais são os seus requisitos para o veículo?</p>
         </div>
 
-        <div class="wizard-summary">
-          <div>
-            <p class="panel-label">Categorias</p>
-            <h3>{{ selectedCategories.length }} categoria(s) selecionada(s)</h3>
+        <div class="form-sections">
+          <div class="form-section">
+            <label class="section-title">Categorias de Interesse</label>
+            <div class="selection-grid categories-grid">
+              <label *ngFor="let cat of ['Hatch', 'Sedan', 'SUV', 'Picape', 'Eletrico', 'Premium', 'Classico']"
+                     class="selection-card checkbox-card"
+                     [class.is-selected]="isCategorySelected(cat)">
+                <input type="checkbox" [checked]="isCategorySelected(cat)" (change)="onCategoryChange(cat, $event)">
+                <div class="card-content">
+                  <span class="card-text">{{ cat }}</span>
+                </div>
+              </label>
+            </div>
+            <div *ngIf="form.get('technicalPreferences.categories')?.touched && form.get('technicalPreferences.categories')?.invalid" class="error-msg">
+              Selecione pelo menos uma categoria.
+            </div>
           </div>
-          <div>
-            <p class="panel-label">Prioridades</p>
-            <h3>{{ selectedPriorities.length }} atributo(s) no ranking</h3>
+
+          <div class="form-row">
+            <div class="form-section flex-1">
+              <label class="section-title">Idade do Veículo</label>
+              <select formControlName="vehicleAge" class="form-select-modern">
+                <option value="0km">🚗 0km</option>
+                <option value="up_to_3_years">📅 Até 3 anos</option>
+                <option value="up_to_10_years">⏳ Até 10 anos</option>
+                <option value="classic">💎 Clássicos</option>
+              </select>
+            </div>
+
+            <div class="form-section flex-1">
+              <label class="section-title">Câmbio</label>
+              <div class="selection-grid compact">
+                <label class="selection-card" [class.is-selected]="form.get('technicalPreferences.transmission')?.value === 'manual'">
+                  <input type="radio" formControlName="transmission" value="manual">
+                  <div class="card-content">
+                    <span class="card-text">Manual</span>
+                  </div>
+                </label>
+                <label class="selection-card" [class.is-selected]="form.get('technicalPreferences.transmission')?.value === 'automatic'">
+                  <input type="radio" formControlName="transmission" value="automatic">
+                  <div class="card-content">
+                    <span class="card-text">Automático</span>
+                  </div>
+                </label>
+                <label class="selection-card" [class.is-selected]="form.get('technicalPreferences.transmission')?.value === 'indifferent'">
+                  <input type="radio" formControlName="transmission" value="indifferent">
+                  <div class="card-content">
+                    <span class="card-text">Indiferente</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ETAPA 4: PESOS E PRIORIDADES -->
+      <section class="wizard-panel" *ngIf="currentStep === 4" formGroupName="priorities">
+        <div class="panel-copy">
+          <p class="panel-label">Passo 4</p>
+          <h2>Pesos e Prioridades</h2>
+          <p>O coração do nosso algoritmo. De 1 (pouco) a 5 (indispensável).</p>
+        </div>
+
+        <div class="priority-sliders-modern">
+          <div class="slider-card" [class.is-high]="form.get('priorities.economy')?.value >= 4">
+            <div class="slider-info">
+              <div class="info-text">
+                <label>Economia de Combustível</label>
+                <p>O quanto você valoriza gastar menos no posto.</p>
+              </div>
+              <div class="info-badge">{{ form.get('priorities.economy')?.value }}</div>
+            </div>
+            <input type="range" min="1" max="5" step="1" formControlName="economy" class="modern-range">
+            <div class="range-labels">
+              <span>Mínima</span>
+              <span>Indispensável</span>
+            </div>
+          </div>
+
+          <div class="slider-card" [class.is-high]="form.get('priorities.power')?.value >= 4">
+            <div class="slider-info">
+              <div class="info-text">
+                <label>Potência e Desempenho</label>
+                <p>Aceleração e força para ultrapassagens.</p>
+              </div>
+              <div class="info-badge">{{ form.get('priorities.power')?.value }}</div>
+            </div>
+            <input type="range" min="1" max="5" step="1" formControlName="power" class="modern-range">
+            <div class="range-labels">
+              <span>Mínima</span>
+              <span>Indispensável</span>
+            </div>
+          </div>
+
+          <div class="slider-card" [class.is-high]="form.get('priorities.comfort')?.value >= 4">
+            <div class="slider-info">
+              <div class="info-text">
+                <label>Conforto e Tecnologia</label>
+                <p>Acabamento, multimídia e suavidade ao rodar.</p>
+              </div>
+              <div class="info-badge">{{ form.get('priorities.comfort')?.value }}</div>
+            </div>
+            <input type="range" min="1" max="5" step="1" formControlName="comfort" class="modern-range">
+            <div class="range-labels">
+              <span>Mínima</span>
+              <span>Indispensável</span>
+            </div>
+          </div>
+
+          <div class="slider-card" [class.is-high]="form.get('priorities.safety')?.value >= 4">
+            <div class="slider-info">
+              <div class="info-text">
+                <label>Segurança</label>
+                <p>Airbags, assistentes de condução e frenagem.</p>
+              </div>
+              <div class="info-badge">{{ form.get('priorities.safety')?.value }}</div>
+            </div>
+            <input type="range" min="1" max="5" step="1" formControlName="safety" class="modern-range">
+            <div class="range-labels">
+              <span>Mínima</span>
+              <span>Indispensável</span>
+            </div>
           </div>
         </div>
       </section>
 
       <div class="wizard-actions">
-        <app-shared-button variant="secondary" type="button" (buttonClick)="goBack()" [disabled]="currentStep === 1 || isCalculating">
+        <button type="button" class="btn-secondary" (click)="goBack()" [disabled]="currentStep === 1 || isCalculating">
           Voltar
-        </app-shared-button>
+        </button>
 
-        <app-shared-button variant="primary" type="submit" [disabled]="isCalculating || !canProceed">
-          <span class="button-icon">{{ primaryActionIcon }}</span>
-          <span>{{ primaryActionLabel }}</span>
-        </app-shared-button>
+        <button type="submit" class="btn-primary" [disabled]="isCalculating">
+          {{ primaryActionLabel }}
+        </button>
       </div>
     </form>
   </section>
 
-  <div *ngIf="isCalculating" class="loading-overlay" role="status" aria-live="polite" aria-label="Carregando resultados">
-      <div class="loading-card">
+  <div *ngIf="isCalculating" class="loading-overlay">
+    <div class="loading-card">
       <div class="spinner"></div>
-      <h3>AutoMatch está calculando seus matches...</h3>
-      <p>Cruzando prioridades e categorias para gerar as melhores sugestões.</p>
-      <div class="progress-dots">
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-      </div>
+      <h3>Processando seu Match...</h3>
+      <p>Nossa IA está analisando milhares de combinações para você.</p>
     </div>
   </div>
 </main>
