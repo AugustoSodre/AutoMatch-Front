@@ -36,8 +36,23 @@ export class SavedMatchesDashboardComponent {
   });
 
   private readonly compareSelectionSubject = new BehaviorSubject<ReadonlyArray<string>>([]);
+  private readonly wizardResultsSubject = new BehaviorSubject<ReadonlyArray<SavedMatchViewModel>>([]);
 
-  public readonly savedMatches$ = this.accountService.getSavedMatches();
+  public readonly savedMatches$ = combineLatest([
+    this.accountService.getSavedMatches(),
+    this.wizardResultsSubject.asObservable()
+  ]).pipe(
+    map(([dbMatches, wizardMatches]) => {
+      // Unir resultados, removendo duplicatas se existirem
+      const combined = [...wizardMatches, ...dbMatches];
+      const uniqueIds = new Set<string>();
+      return combined.filter(match => {
+        if (uniqueIds.has(match.car.id)) return false;
+        uniqueIds.add(match.car.id);
+        return true;
+      });
+    })
+  );
 
   public readonly dashboardState$: Observable<SavedMatchesDashboardState> = combineLatest([
     this.savedMatches$,
@@ -73,7 +88,13 @@ export class SavedMatchesDashboardComponent {
     private readonly accountService: AccountService,
     private readonly formBuilder: FormBuilder,
     private readonly router: Router
-  ) {}
+  ) {
+    const navigation = this.router.getCurrentNavigation();
+    const state = navigation?.extras.state as { results: SavedMatchViewModel[] };
+    if (state?.results) {
+      this.wizardResultsSubject.next(state.results);
+    }
+  }
 
   public get searchControl(): FormControl<string> {
     return this.dashboardForm.controls.search;

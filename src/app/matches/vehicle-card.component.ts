@@ -17,6 +17,10 @@ export class VehicleCardComponent {
 
   @Output() toggleCompare = new EventEmitter<void>();
 
+  public get displayMatchPercentage(): number {
+    return Math.max(0, this.match.matchPercentage);
+  }
+
   public emitToggleCompare(): void {
     this.toggleCompare.emit();
   }
