@@ -37,20 +37,13 @@
         <div class="panel-copy">
           <p class="panel-label">Passo 1</p>
           <h2>Perfil e Uso</h2>
-          <p>Conte-nos como será o dia a dia com seu novo veículo.</p>
+          <p>Conte como você pretende usar o carro no dia a dia para o match considerar espaço, rotina e tipo de trajeto.</p>
         </div>
 
         <div class="form-sections">
           <div class="form-section">
-            <label class="section-title">Tamanho da Família</label>
+            <label class="section-title">Tamanho do grupo que vai viajar com você</label>
             <div class="selection-grid">
-              <label class="selection-card" [class.is-selected]="form.get('demographics.familySize')?.value === '1'">
-                <input type="radio" formControlName="familySize" value="1">
-                <div class="card-content">
-                  <span class="card-icon">👤</span>
-                  <span class="card-text">1 pessoa</span>
-                </div>
-              </label>
               <label class="selection-card" [class.is-selected]="form.get('demographics.familySize')?.value === '2'">
                 <input type="radio" formControlName="familySize" value="2">
                 <div class="card-content">
@@ -76,7 +69,7 @@
           </div>
 
           <div class="form-section">
-            <label class="section-title">Uso Principal</label>
+            <label class="section-title">Uso principal do veículo</label>
             <div class="selection-grid">
               <label class="selection-card" [class.is-selected]="form.get('demographics.primaryUse')?.value === 'work_commute'">
                 <input type="radio" formControlName="primaryUse" value="work_commute">
@@ -110,7 +103,7 @@
           </div>
 
           <div class="form-section">
-            <label class="section-title">Ambiente Principal</label>
+            <label class="section-title">Ambiente principal de uso</label>
             <div class="selection-grid">
               <label class="selection-card" [class.is-selected]="form.get('demographics.primaryEnvironment')?.value === 'city'">
                 <input type="radio" formControlName="primaryEnvironment" value="city">
@@ -158,32 +151,6 @@
             </div>
           </div>
 
-          <div class="form-section">
-            <label class="section-title">Tolerância a Custos Mensais (IPVA/Seguro/Manutenção)</label>
-            <div class="selection-grid">
-              <label class="selection-card" [class.is-selected]="form.get('financials.costTolerance')?.value === 'low'">
-                <input type="radio" formControlName="costTolerance" value="low">
-                <div class="card-content">
-                  <span class="card-icon">📉</span>
-                  <span class="card-text">Baixa</span>
-                </div>
-              </label>
-              <label class="selection-card" [class.is-selected]="form.get('financials.costTolerance')?.value === 'medium'">
-                <input type="radio" formControlName="costTolerance" value="medium">
-                <div class="card-content">
-                  <span class="card-icon">📊</span>
-                  <span class="card-text">Média</span>
-                </div>
-              </label>
-              <label class="selection-card" [class.is-selected]="form.get('financials.costTolerance')?.value === 'high'">
-                <input type="radio" formControlName="costTolerance" value="high">
-                <div class="card-content">
-                  <span class="card-icon">📈</span>
-                  <span class="card-text">Alta</span>
-                </div>
-              </label>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -197,14 +164,15 @@
 
         <div class="form-sections">
           <div class="form-section">
-            <label class="section-title">Categorias de Interesse</label>
+            <label class="section-title">Categorias de interesse</label>
             <div class="selection-grid categories-grid">
-              <label *ngFor="let cat of ['Hatch', 'Sedan', 'SUV', 'Picape', 'Eletrico', 'Premium', 'Classico']"
+              <label *ngFor="let category of categoryOptions"
                      class="selection-card checkbox-card"
-                     [class.is-selected]="isCategorySelected(cat)">
-                <input type="checkbox" [checked]="isCategorySelected(cat)" (change)="onCategoryChange(cat, $event)">
+                     [class.is-selected]="isCategorySelected(category.name)">
+                <input type="checkbox" [checked]="isCategorySelected(category.name)" (change)="onCategoryChange(category.name, $event)">
                 <div class="card-content">
-                  <span class="card-text">{{ cat }}</span>
+                  <span class="card-text">{{ category.name }}</span>
+                  <span class="card-subtext">{{ category.description }}</span>
                 </div>
               </label>
             </div>
@@ -215,12 +183,11 @@
 
           <div class="form-row">
             <div class="form-section flex-1">
-              <label class="section-title">Idade do Veículo</label>
+              <label class="section-title">Faixa de Ano do Modelo</label>
               <select formControlName="vehicleAge" class="form-select-modern">
-                <option value="0km">🚗 0km</option>
-                <option value="up_to_3_years">📅 Até 3 anos</option>
-                <option value="up_to_10_years">⏳ Até 10 anos</option>
-                <option value="classic">💎 Clássicos</option>
+                <option value="0km">🚗 Lançamento atual</option>
+                <option value="up_to_3_years">📅 Lançado nos últimos 3 anos</option>
+                <option value="up_to_10_years">⏳ Lançado entre 4 e 10 anos atrás</option>
               </select>
             </div>
 
@@ -256,7 +223,7 @@
         <div class="panel-copy">
           <p class="panel-label">Passo 4</p>
           <h2>Pesos e Prioridades</h2>
-          <p>O coração do nosso algoritmo. De 1 (pouco) a 5 (indispensável).</p>
+          <p>O coração do nosso algoritmo. Priorize economia e potência de 1 (pouco) a 5 (indispensável).</p>
         </div>
 
         <div class="priority-sliders-modern">
@@ -290,35 +257,6 @@
             </div>
           </div>
 
-          <div class="slider-card" [class.is-high]="form.get('priorities.comfort')?.value >= 4">
-            <div class="slider-info">
-              <div class="info-text">
-                <label>Conforto e Tecnologia</label>
-                <p>Acabamento, multimídia e suavidade ao rodar.</p>
-              </div>
-              <div class="info-badge">{{ form.get('priorities.comfort')?.value }}</div>
-            </div>
-            <input type="range" min="1" max="5" step="1" formControlName="comfort" class="modern-range">
-            <div class="range-labels">
-              <span>Mínima</span>
-              <span>Indispensável</span>
-            </div>
-          </div>
-
-          <div class="slider-card" [class.is-high]="form.get('priorities.safety')?.value >= 4">
-            <div class="slider-info">
-              <div class="info-text">
-                <label>Segurança</label>
-                <p>Airbags, assistentes de condução e frenagem.</p>
-              </div>
-              <div class="info-badge">{{ form.get('priorities.safety')?.value }}</div>
-            </div>
-            <input type="range" min="1" max="5" step="1" formControlName="safety" class="modern-range">
-            <div class="range-labels">
-              <span>Mínima</span>
-              <span>Indispensável</span>
-            </div>
-          </div>
         </div>
       </section>
 

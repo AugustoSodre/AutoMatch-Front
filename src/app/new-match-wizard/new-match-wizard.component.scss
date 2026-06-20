@@ -163,6 +163,14 @@
   display: block;
 }
 
+.section-description {
+  margin: -0.5rem 0 0;
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 0.92rem;
+  line-height: 1.5;
+  max-width: 62ch;
+}
+
 .selection-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -217,6 +225,12 @@
       font-size: 0.95rem;
       transition: color 0.3s ease;
     }
+
+      .card-subtext {
+        color: rgba(255, 255, 255, 0.54);
+        font-size: 0.82rem;
+        line-height: 1.35;
+      }
   }
 
   &::before {

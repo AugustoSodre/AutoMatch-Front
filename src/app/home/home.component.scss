@@ -7,7 +7,7 @@
   height: 60vh;
   min-height: 420px;
   display: flex;
-  align-items: flex-start;
+  align-items: center; /* Centraliza verticalmente de forma mais harmoniosa */
   color: white;
 }
 
@@ -17,92 +17,98 @@
   background-image: url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1800&q=60');
   background-size: cover;
   background-position: center right;
-  filter: brightness(0.9);
   z-index: 0;
 }
 
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, rgba(17,24,39,0.85) 0%, rgba(17,24,39,0.55) 40%, rgba(17,24,39,0.15) 100%);
+  background: linear-gradient(90deg, rgba(17,24,39,0.9) 0%, rgba(17,24,39,0.6) 40%, rgba(17,24,39,0.1) 100%);
   z-index: 1;
 }
 
 .hero-inner {
   position: relative;
   z-index: 2;
-  display: flex;
-  align-items: center;
-  height: 100%;
-  padding: 3rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
 }
 
 .hero-left {
-  max-width: 720px;
+  max-width: 600px;
 }
 
 .hero-left h1 {
-  font-size: 2.25rem;
-  font-weight: 800;
+  font-size: 2.75rem; /* Leve aumento para compensar o uso de minúsculas */
+  font-weight: 700;
   color: #ffffff;
-  line-height: 1.05;
-  margin: 2rem 0;
+  line-height: 1.15;
+  margin: 0;
+  letter-spacing: -0.02em;
 }
 
-/* Value Proposition card overlapping hero */
+/* Value Proposition */
 .value-prop {
   position: relative;
   transform: translateY(-50%);
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
   padding: 0 1rem;
   z-index: 3;
 }
 
 .value-card {
   background: white;
-  border-radius: 50px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  border-radius: 16px; /* Borda mais moderna que o antigo 50px */
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04); /* Sombra difusa e elegante */
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  padding: 24px 40px;
+  justify-content: space-between;
+  padding: 24px 48px;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
 .vp-item {
-  flex: 1 1 0;
+  flex: 1;
   text-align: center;
-  font-weight: 600;
+  font-weight: 500; /* Mais limpo que o 600 */
+  font-size: 1.05rem;
   color: #0f1724;
 }
 
 .vp-sep {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   background: var(--primary-orange);
   border-radius: 50%;
+  opacity: 0.8;
 }
 
 /* Categories */
 .categories {
-  padding: 0 1rem 2.5rem;
+  padding: 1rem 1rem 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .section-title {
-  font-size: 1rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  color: #ffffff;
-  margin-bottom: 1rem;
+  color: var(--bg-dark-blue);
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.01em;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Aumentado de 250 para dar mais respiro à imagem */
+  gap: 24px;
 }
 
 .cat-card {
-  min-height: 180px;
+  min-height: 220px;
   background-size: cover;
   background-position: center;
   background-color: #374151;
@@ -111,19 +117,22 @@
   overflow: hidden;
   display: flex;
   align-items: flex-end;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .cat-card::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(17, 24, 39, 0.9) 0%, rgba(17, 24, 39, 0) 100%);
+  background: linear-gradient(to top, rgba(17, 24, 39, 0.85) 0%, rgba(17, 24, 39, 0) 60%);
   z-index: 1;
+  transition: opacity 0.3s ease;
 }
 
 .cat-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15);
 }
 
 .cat-footer {
@@ -132,14 +141,16 @@
   z-index: 2;
   background: transparent;
   color: white;
-  padding: 0.75rem 1rem;
+  padding: 1.25rem;
+  font-size: 1.125rem;
   text-align: left;
   font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
 /* Services */
 .services {
-  padding: 2.5rem 1rem 4rem;
+  padding: 4rem 1rem;
   background: var(--bg-dark-blue);
   color: #ffffff;
 }
@@ -149,79 +160,74 @@
   margin: 0 auto;
 }
 
-.services-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.25rem;
-  margin-top: 1rem;
-}
-
-.service-col h3 {
-  margin: 0 0 0.5rem 0;
+.section-title.light {
   color: #ffffff;
 }
 
-.service-card {
-  background: rgba(44,74,115,0.26);
-  padding: 2rem;
-  border-radius: 8px;
-  color: #e6eef8;
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 2rem;
 }
 
-.section-title.light {
-  color: #f3f4f6;
+.service-col h3 {
+  margin: 0 0 1rem 0;
+  color: #ffffff;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.service-card {
+  background: rgba(255, 255, 255, 0.04); /* Efeito de glass sutil, tira o peso do azul chapado */
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 1.75rem;
+  border-radius: 12px;
+  color: #d1d5db;
+  line-height: 1.6;
+  height: 100%;
+  transition: background 0.3s ease;
+}
+
+.service-card:hover {
+  background: rgba(255, 255, 255, 0.07);
 }
 
 .services .highlight {
-  color: #fbbf24;
-  font-weight: 700;
+  color: var(--primary-orange);
+  font-weight: 600;
 }
 
+/* Responsividade */
 @media (max-width: 900px) {
-  .grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
-  .services-grid { grid-template-columns: 1fr; }
-  .hero-left h1 { font-size: 1.75rem; }
+  .services-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+  .hero-left h1 { font-size: 2.25rem; }
 }
 
-@media (max-width: 480px) {
-  .grid { grid-template-columns: 1fr; }
-  .value-card { flex-direction: column; gap: 0.5rem; }
-  .vp-sep { display: none; }
-}
-
-/* Mobile adjustments for <= 768px */
 @media (max-width: 768px) {
   .hero {
     height: 45vh;
-    min-height: 320px;
+    min-height: 360px;
   }
-
-  .hero-inner { padding: 1.25rem; }
-
-  /* Reduce main hero heading size to prevent overflow */
+  
   .hero-left h1 {
-    font-size: 1.75rem;
-    line-height: 1.05;
-    margin: 1rem 0;
+    font-size: 1.875rem;
   }
-
-  /* Value prop pill adjustments */
+  
   .value-prop {
-    transform: translateY(-30%);
-    margin-bottom: 1.5rem;
-    padding: 0 0.5rem;
+    transform: translateY(-20px);
+    margin-bottom: 1rem;
   }
-
+  
   .value-card {
     flex-direction: column;
-    gap: 12px;
-    padding: 16px 20px;
-    border-radius: 16px;
-    max-width: 92%;
-    margin: 0 auto;
+    gap: 16px;
+    padding: 24px;
+    border-radius: 12px;
+    max-width: 90%;
   }
-
+  
   .vp-sep { display: none; }
-
-  .vp-item { text-align: center; }
+  
+  .grid { grid-template-columns: 1fr; }
 }

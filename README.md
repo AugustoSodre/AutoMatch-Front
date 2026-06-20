@@ -4,10 +4,14 @@ Bem-vindo ao **AutoMatch**, a interface inteligente para encontrar o seu carro i
 
 ## Funcionalidades Principais
 
-- **Wizard de Recomendação (Quiz):** Um formulário interativo de 4 etapas que coleta preferências demográficas, financeiras, técnicas e prioridades de IA (Economia, Potência, Conforto, Segurança).
-- **Dashboard de Matches:** Visualização clara dos veículos recomendados, com porcentagem de compatibilidade calculada por Deep Learning.
-- **UI Premium:** Interface limpa, responsiva e com feedback visual dinâmico (Selection Cards, Sliders estilizados).
-- **Integração em Tempo Real:** Comunicação direta com o backend para processamento de matches e persistência de dados.
+- **Novo Match Wizard:** Formulário interativo de 4 etapas (Perfil & Uso, Financeiro, Preferências Técnicas, Prioridades).
+  - Etapa 1: Tamanho do grupo, uso principal, ambiente
+  - Etapa 2: Orçamento máximo
+  - Etapa 3: Categorias (com descrições para cada uma), faixa de ano do modelo, câmbio
+  - Etapa 4: Economia e Potência (1-5)
+- **Dashboard de Matches:** Visualização dos veículos recomendados com match percentage do modelo two-tower.
+- **UI Premium:** Interface limpa, responsiva com cards informativos e sliders estilizados.
+- **Integração em Tempo Real:** Comunicação com o backend para autenticação, matches e persistência.
 
 ## 🛠️ Stack Tecnológica
 

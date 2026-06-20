@@ -15,6 +15,12 @@ interface WizardStep {
   description: string;
 }
 
+interface CategoryOption {
+  name: 'Hatch' | 'Sedan' | 'SUV' | 'Picape' | 'Eletrico' | 'Premium';
+  icon: string;
+  description: string;
+}
+
 @Component({
   selector: 'app-new-match-wizard',
   standalone: true,
@@ -24,11 +30,20 @@ interface WizardStep {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NewMatchWizardComponent implements OnInit {
+  public readonly categoryOptions: ReadonlyArray<CategoryOption> = [
+    { name: 'Hatch', icon: '', description: 'Compacto, prático e bom para uso urbano.' },
+    { name: 'Sedan', icon: '', description: 'Mais porta-malas e conforto para rotina e estrada.' },
+    { name: 'SUV', icon: '', description: 'Mais altura, espaço interno e presença.' },
+    { name: 'Picape', icon: '', description: 'Versátil para carga, trabalho e uso misto.' },
+    { name: 'Eletrico', icon: '', description: 'Mobilidade moderna e foco em eficiência energética.' },
+    { name: 'Premium', icon: '', description: 'Mais refinamento, tecnologia e acabamento.' },
+  ];
+
   public readonly wizardSteps: ReadonlyArray<WizardStep> = [
-    { number: 1, title: 'Uso e Perfil', description: 'Como você usará o carro?' },
-    { number: 2, title: 'Financeiro', description: 'Seu orçamento e tolerância' },
-    { number: 3, title: 'Preferências', description: 'O que o carro deve ter?' },
-    { number: 4, title: 'Prioridades', description: 'O que é mais importante?' }
+    { number: 1, title: 'Uso e Perfil', description: 'Quem vai usar o carro e em que rotina?' },
+    { number: 2, title: 'Financeiro', description: 'Seu orçamento de compra' },
+    { number: 3, title: 'Preferências', description: 'Categorias e faixa de lançamento do modelo' },
+    { number: 4, title: 'Prioridades', description: 'Economia e potência' }
   ];
 
   public currentStep: 1 | 2 | 3 | 4 = 1;
@@ -44,13 +59,12 @@ export class NewMatchWizardComponent implements OnInit {
   ) {
     this.form = this.formBuilder.group({
       demographics: this.formBuilder.group({
-        familySize: ['1', Validators.required],
+        familySize: ['2', Validators.required],
         primaryUse: ['work_commute', Validators.required],
         primaryEnvironment: ['city', Validators.required]
       }),
       financials: this.formBuilder.group({
-        maxBudget: [null, [Validators.required, Validators.min(1000)]],
-        costTolerance: ['medium', Validators.required]
+        maxBudget: [null, [Validators.required, Validators.min(1000)]]
       }),
       technicalPreferences: this.formBuilder.group({
         categories: this.formBuilder.array([], [Validators.required, Validators.minLength(1)]),
@@ -59,9 +73,7 @@ export class NewMatchWizardComponent implements OnInit {
       }),
       priorities: this.formBuilder.group({
         economy: [3, [Validators.required, Validators.min(1), Validators.max(5)]],
-        power: [3, [Validators.required, Validators.min(1), Validators.max(5)]],
-        comfort: [3, [Validators.required, Validators.min(1), Validators.max(5)]],
-        safety: [3, [Validators.required, Validators.min(1), Validators.max(5)]]
+        power: [3, [Validators.required, Validators.min(1), Validators.max(5)]]
       })
     });
   }
