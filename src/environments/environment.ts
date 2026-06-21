@@ -1,7 +1,6 @@
-// This file can be replaced during build by using the `fileReplacements` array.
-// `ng build` replaces `environment.ts` with `environment.prod.ts`.
-
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3000/api'
+  apiUrl: 'http://localhost:3000/api',
+  supabaseUrl: 'https://nkpnuxzrzrhuhoojbtsx.supabase.co',
+  supabaseKey: 'sb_publishable_av53STMEgluD0aLFs2hOpw_QzEFkpcV',
 };

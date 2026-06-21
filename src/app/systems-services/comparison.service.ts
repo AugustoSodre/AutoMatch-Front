@@ -4,9 +4,7 @@ import { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';
 import { CarService } from './car.service';
 import { Car } from '../car.interface';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class ComparisonService {
   private readonly selectedCarIdsSubject = new BehaviorSubject<[string, string]>(['kwid-iconic-2026', 'opala-ss-1980']);
 
