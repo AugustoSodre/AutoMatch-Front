@@ -1,6 +1,10 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { switchMap, catchError, of, Observable } from 'rxjs';
 
-import { MockImageService } from '../systems-services';
+import { CarService } from '../systems-services';
+import { Car } from '../car.interface';
 
 interface DetailItem {
   label: string;
@@ -9,49 +13,61 @@ interface DetailItem {
 
 @Component({
   selector: 'app-car-details',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './car-details.component.html',
-  styleUrls: ['./car-details.component.scss']
+  styleUrls: ['./car-details.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CarDetailsComponent {
-  public readonly title = 'Kwid Iconic 1.0';
-  public readonly subtitle = 'A partir de';
-  public readonly price = 'R$ 85.190';
-  public readonly metadata = 'Nacional, 2026';
+export class CarDetailsComponent implements OnInit {
+  public car$: Observable<Car | null>;
 
-  public readonly mainImage = 'https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=1600&q=60';
+  constructor(
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly carService: CarService
+  ) {
+    this.car$ = this.route.queryParamMap.pipe(
+      switchMap((params) => {
+        const carId = params.get('carId');
+        if (!carId) {
+          this.router.navigate(['/inicio']);
+          return of(null);
+        }
+        return this.carService.getCarById(carId).pipe(
+          catchError(() => {
+            this.router.navigate(['/inicio']);
+            return of(null);
+          })
+        );
+      })
+    );
+  }
 
-  public readonly thumbnails: ReadonlyArray<{ src: string; alt: string }>;
+  public ngOnInit(): void {}
 
-  public readonly technicalDetails: ReadonlyArray<DetailItem> = [
-    { label: 'Motor', value: '1.0 SCe flex' },
-    { label: 'Potência', value: '71 cv' },
-    { label: 'Consumo', value: '14,9 km/l na estrada' },
-    { label: 'Peso / torque', value: '1.011 kg / 10,0 kgfm' }
-  ];
+  public buildTechnicalDetails(car: Car): DetailItem[] {
+    return [
+      { label: 'Motor', value: car.specs.engine },
+      { label: 'Potência', value: car.specs.power },
+      { label: 'Consumo', value: car.specs.consumption },
+      { label: 'Peso', value: car.specs.weight },
+    ];
+  }
 
-  public readonly costDetails: ReadonlyArray<DetailItem> = [
-    { label: 'IPVA', value: 'R$ 2.300' },
-    { label: 'Seguro', value: 'R$ 3.200' },
-    { label: 'Revisões', value: 'R$ 1.800' },
-    { label: 'Procedência', value: 'Concessionária autorizada' },
-    { label: 'Garantia', value: '3 anos de fábrica' }
-  ];
+  public buildCostDetails(car: Car): DetailItem[] {
+    return [
+      { label: 'IPVA', value: `R$ ${car.costs.ipva.toLocaleString('pt-BR')}` },
+      { label: 'Seguro', value: `R$ ${car.costs.insurance.toLocaleString('pt-BR')}` },
+      { label: 'Manutenção', value: `R$ ${car.costs.maintenance.toLocaleString('pt-BR')}` },
+    ];
+  }
 
-  public readonly equipmentItems: ReadonlyArray<string> = [
-    'Freios ABS',
-    'Airbags frontais',
-    'Câmera traseira',
-    'Central multimídia',
-    'Ar-condicionado',
-    'Direção elétrica',
-    'Controle de estabilidade',
-    'Sensor de estacionamento'
-  ];
+  public formatPrice(value: number): string {
+    return `R$ ${value.toLocaleString('pt-BR')}`;
+  }
 
-  constructor(private readonly mockImageService: MockImageService) {
-    this.thumbnails = this.mockImageService.getCarThumbnails().map((src: string, index: number) => ({
-      src,
-      alt: `Imagem do carro ${index + 1}`
-    }));
+  public trackByIndex(index: number): number {
+    return index;
   }
 }

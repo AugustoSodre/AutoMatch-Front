@@ -18,15 +18,15 @@ export class HomeComponent implements OnInit {
   public readonly categoryCards: ReadonlyArray<CategoryCard>;
 
   constructor(private readonly mockImageService: MockImageService) {
-    const categoryImages = this.mockImageService.getCategoryImages() as any;
+    const categoryImages = this.mockImageService.getCategoryImages();
 
     this.categoryCards = [
-      { title: 'Hatch', imageUrl: categoryImages.hatch || categoryImages.populares || 'assets/hatch.jpg' },
-      { title: 'Sedan', imageUrl: categoryImages.sedan || categoryImages.familia || 'assets/sedan.jpg' },
-      { title: 'SUV', imageUrl: categoryImages.suv || categoryImages.aventura || 'assets/suv.jpg' },
-      { title: 'Picape', imageUrl: categoryImages.picape || categoryImages.aventura || 'assets/picape.jpg' },
-      { title: 'Elétrico', imageUrl: categoryImages.eletrico || categoryImages.populares || 'assets/eletrico.jpg' },
-      { title: 'Premium', imageUrl: categoryImages.premium || categoryImages.luxo || 'assets/premium.jpg' }
+      { title: 'Hatch', imageUrl: categoryImages.hatch },
+      { title: 'Sedan', imageUrl: categoryImages.sedan },
+      { title: 'SUV', imageUrl: categoryImages.suv },
+      { title: 'Picape', imageUrl: categoryImages.picape },
+      { title: 'Elétrico', imageUrl: categoryImages.eletrico },
+      { title: 'Premium', imageUrl: categoryImages.premium }
     ];
   }
 

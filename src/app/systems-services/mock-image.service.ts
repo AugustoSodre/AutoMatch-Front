@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 
 export interface CategoryImageMap {
-  populares: string;
-  aventura: string;
-  familia: string;
-  luxo: string;
+  hatch: string;
+  sedan: string;
+  suv: string;
+  picape: string;
+  eletrico: string;
+  premium: string;
 }
 
 @Injectable({
@@ -12,10 +14,12 @@ export interface CategoryImageMap {
 })
 export class MockImageService {
   private readonly categoryImages: CategoryImageMap = {
-    populares: 'https://images.unsplash.com/photo-1614152204322-e6ab7f040c1d?auto=format&fit=crop&w=800&q=80',
-    aventura: 'https://images.unsplash.com/photo-1490902931801-d6f80ca94fe4?auto=format&fit=crop&w=800&q=80',
-    familia: 'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=800&q=80',
-    luxo: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=800&q=80'
+    hatch: 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&w=800&q=80',
+    sedan: 'https://images.unsplash.com/photo-1581540222194-0def2dda95b8?auto=format&fit=crop&w=800&q=80',
+    suv: 'https://images.unsplash.com/photo-1519642918688-7e43b19245d8?auto=format&fit=crop&w=800&q=80',
+    picape: 'https://images.unsplash.com/photo-1544761634-6e4243d1e62b?auto=format&fit=crop&w=800&q=80',
+    eletrico: 'https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=800&q=80',
+    premium: 'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=800&q=80'
   };
 
   public getCategoryImages(): CategoryImageMap {

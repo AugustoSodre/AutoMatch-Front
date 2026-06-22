@@ -1,6 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Observable, from, BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { getSupabaseClient } from '../supabase/supabase.client';
 import { mapProfileToUserData } from '../supabase/mappers';
 import { ProfileRow } from '../supabase/types';
@@ -83,14 +83,19 @@ export class AuthService {
     return from(
       supabase.auth.signInWithPassword({ email: data.email, password: data.password })
     ).pipe(
-      map(({ data: authData, error }) => {
+      switchMap(({ data: authData, error }) => {
         if (error || !authData.session) {
           throw { status: 401, error: { error: 'Email ou senha inválidos' } };
         }
         const session = authData.session;
-        const userData = this.buildUserData(session.user);
-        this.setSession({ token: session.access_token, user: userData });
-        return { token: session.access_token, user: userData };
+        return from(
+          this.fetchProfile(session.user.id, session.user.email || '')
+        ).pipe(
+          map((userData) => {
+            this.setSession({ token: session.access_token, user: userData });
+            return { token: session.access_token, user: userData };
+          })
+        );
       })
     );
   }
@@ -109,7 +114,7 @@ export class AuthService {
         },
       })
     ).pipe(
-      map(({ data: authData, error }) => {
+      switchMap(({ data: authData, error }) => {
         if (error) {
           if (error.message.includes('already')) {
             throw { status: 409, error: { error: 'Email já cadastrado' } };
@@ -119,9 +124,15 @@ export class AuthService {
         if (!authData.session || !authData.user) {
           throw { status: 500, error: { error: 'Erro ao criar conta' } };
         }
-        const userData = this.buildUserData(authData.user);
-        this.setSession({ token: authData.session.access_token, user: userData });
-        return { token: authData.session.access_token, user: userData };
+        const session = authData.session;
+        return from(
+          this.fetchProfile(session.user.id, session.user.email || '')
+        ).pipe(
+          map((userData) => {
+            this.setSession({ token: session.access_token, user: userData });
+            return { token: session.access_token, user: userData };
+          })
+        );
       })
     );
   }

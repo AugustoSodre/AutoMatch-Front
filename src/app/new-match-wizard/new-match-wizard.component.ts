@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef } from '@
 import { Router } from '@angular/router';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { MockImageService, CarService } from '../systems-services';
+import { CarService } from '../systems-services';
 import { SharedModule } from '../shared/shared.module';
 import { UserPreferences } from './user-preferences.interface';
 import { HttpClient } from '@angular/common/http';

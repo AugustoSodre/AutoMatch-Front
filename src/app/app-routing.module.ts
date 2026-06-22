@@ -15,7 +15,7 @@ const routes: Routes = [
   { path: 'compare', redirectTo: 'comparar', pathMatch: 'full' },
   { path: 'comparar', loadComponent: () => import('./comparison-page/comparison-page.component').then((component) => component.ComparisonPageComponent) },
   { path: 'novo-match', loadComponent: () => import('./new-match-wizard/new-match-wizard.component').then((component) => component.NewMatchWizardComponent) },
-  { path: 'detalhes-carro', loadChildren: () => import('./car-details/car-details.module').then((module) => module.CarDetailsModule) },
+  { path: 'detalhes-carro', loadComponent: () => import('./car-details/car-details.component').then((m) => m.CarDetailsComponent) },
   { path: 'administracao', loadChildren: () => import('./admin/admin.module').then((module) => module.AdminModule) },
   { path: '**', redirectTo: 'inicio' }
 ];

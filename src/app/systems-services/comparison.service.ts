@@ -6,7 +6,7 @@ import { Car } from '../car.interface';
 
 @Injectable({ providedIn: 'root' })
 export class ComparisonService {
-  private readonly selectedCarIdsSubject = new BehaviorSubject<[string, string]>(['kwid-iconic-2026', 'opala-ss-1980']);
+  private readonly selectedCarIdsSubject = new BehaviorSubject<[string, string]>(['', '']);
 
   public readonly selectedCarIds$ = this.selectedCarIdsSubject.asObservable();
 
