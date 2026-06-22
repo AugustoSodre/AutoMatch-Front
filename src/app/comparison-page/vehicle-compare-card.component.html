@@ -1,6 +1,6 @@
 <article class="vehicle-card" *ngIf="car; else emptyState" role="region" [attr.aria-label]="'Veículo: ' + car.name + ', ' + car.year">
   <div class="vehicle-image">
-    <img [src]="car.images.main" [alt]="car.name + ', ' + car.year" loading="lazy" />
+    <img [src]="(car.images.main || '/assets/car-placeholder.svg')" [alt]="car.name + ', ' + car.year" loading="lazy" />
   </div>
 
   <div class="vehicle-body">

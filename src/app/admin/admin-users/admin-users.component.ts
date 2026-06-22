@@ -21,6 +21,7 @@ interface User {
 export class AdminUsersComponent implements OnInit {
   public users: User[] = [];
   public loading = true;
+  public loadError = '';
 
   constructor(
     private readonly http: HttpClient,
@@ -37,7 +38,10 @@ export class AdminUsersComponent implements OnInit {
         this.users = users;
         this.loading = false;
       },
-      error: () => { this.loading = false; }
+      error: (err) => {
+        this.loading = false;
+        this.loadError = err.error?.error || err.message || 'Erro ao carregar usuários';
+      }
     });
   }
 

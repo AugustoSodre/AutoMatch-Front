@@ -33,7 +33,9 @@
 
       <div class="loading" *ngIf="loading">Carregando...</div>
 
-      <div class="table-shell" *ngIf="!loading && users.length > 0">
+      <div class="error-banner" *ngIf="!loading && loadError">{{ loadError }}</div>
+
+      <div class="table-shell" *ngIf="!loading && users.length > 0 && !loadError">
         <table class="data-table">
           <thead>
             <tr>
@@ -74,7 +76,7 @@
         </table>
       </div>
 
-      <div class="empty-state" *ngIf="!loading && users.length === 0">
+      <div class="empty-state" *ngIf="!loading && users.length === 0 && !loadError">
         <p>Nenhum usuário encontrado.</p>
       </div>
     </section>

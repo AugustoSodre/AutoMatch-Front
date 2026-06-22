@@ -23,6 +23,7 @@ interface Car {
 export class AdminCarsComponent implements OnInit {
   public cars: Car[] = [];
   public loading = true;
+  public loadError = '';
   public showForm = false;
   public editCarId: string | null = null;
   public form: FormGroup;
@@ -62,7 +63,10 @@ export class AdminCarsComponent implements OnInit {
         this.cars = cars;
         this.loading = false;
       },
-      error: () => { this.loading = false; }
+      error: (err) => {
+        this.loading = false;
+        this.loadError = err.error?.error || err.message || 'Erro ao carregar carros';
+      }
     });
   }
 

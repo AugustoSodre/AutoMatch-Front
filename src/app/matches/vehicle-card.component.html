@@ -1,6 +1,6 @@
 <article class="vehicle-card" [class.is-selected]="selectedForCompare">
   <div class="vehicle-card__media">
-    <img [src]="match.car.images.main" [alt]="match.car.name" />
+    <img [src]="(match.car.images.main || '/assets/car-placeholder.svg')" [alt]="match.car.name" />
 
     <div class="vehicle-card__badges">
       <span class="match-badge">{{ displayMatchPercentage }}% match</span>

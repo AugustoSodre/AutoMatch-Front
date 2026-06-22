@@ -126,7 +126,9 @@
 
       <div class="loading" *ngIf="loading">Carregando...</div>
 
-      <div class="table-shell" *ngIf="!loading && cars.length > 0">
+      <div class="error-banner" *ngIf="!loading && loadError">{{ loadError }}</div>
+
+      <div class="table-shell" *ngIf="!loading && cars.length > 0 && !loadError">
         <table class="data-table">
           <thead>
             <tr>
@@ -140,7 +142,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let car of cars; trackBy: trackByCarId">
-              <td><img [src]="car.images.main" [alt]="car.name" class="car-thumb" /></td>
+              <td><img [src]="(car.images.main || '/assets/car-placeholder.svg')" [alt]="car.name" class="car-thumb" /></td>
               <td><strong>{{ car.name }}</strong></td>
               <td>{{ car.year }}</td>
               <td>{{ formatCurrency(car.price) }}</td>
@@ -154,7 +156,7 @@
         </table>
       </div>
 
-      <div class="empty-state" *ngIf="!loading && cars.length === 0">
+      <div class="empty-state" *ngIf="!loading && cars.length === 0 && !loadError">
         <p>Nenhum carro cadastrado.</p>
       </div>
     </section>

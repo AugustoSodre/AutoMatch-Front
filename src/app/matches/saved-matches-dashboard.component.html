@@ -129,7 +129,7 @@
                   <tr *ngFor="let match of state.matches; trackBy: trackByCarId" [class.is-selected]="isSelectedForCompare(match.car.id)">
                     <td>
                       <div class="table-car">
-                        <img [src]="match.car.images.main" [alt]="match.car.name" />
+                        <img [src]="(match.car.images.main || '/assets/car-placeholder.svg')" [alt]="match.car.name" />
                         <div>
                           <strong>{{ match.car.name }}</strong>
                           <span>{{ match.car.category }}</span>
