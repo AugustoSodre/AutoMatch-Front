@@ -48,6 +48,7 @@ export class AuthService {
   private readonly userKey = 'automatch_user';
   private currentUserSubject = new BehaviorSubject<UserData | null>(this.loadUser());
   private currentTokenSubject = new BehaviorSubject<string | null>(this.loadToken());
+  private authStateChangeLock = false;
 
   public readonly currentUser$ = this.currentUserSubject.asObservable();
   public readonly currentToken$ = this.currentTokenSubject.asObservable();
@@ -59,7 +60,9 @@ export class AuthService {
         if (session) {
           localStorage.setItem(this.tokenKey, session.access_token);
           this.currentTokenSubject.next(session.access_token);
-          this.fetchAndCacheProfile(session.user.id, session.user.email || '');
+          if (!this.authStateChangeLock) {
+            this.fetchAndCacheProfile(session.user.id, session.user.email || '');
+          }
         } else {
           localStorage.removeItem(this.tokenKey);
           localStorage.removeItem(this.userKey);
@@ -69,7 +72,7 @@ export class AuthService {
       });
     });
 
-    if (this.currentTokenSubject.value) {
+    if (!this.authStateChangeLock && this.currentTokenSubject.value) {
       supabase.auth.getSession().then(({ data: { session } }) => {
         if (session) {
           this.fetchAndCacheProfile(session.user.id, session.user.email || '');
@@ -79,12 +82,14 @@ export class AuthService {
   }
 
   public login(data: LoginData): Observable<AuthResponse> {
+    this.authStateChangeLock = true;
     const supabase = getSupabaseClient();
     return from(
       supabase.auth.signInWithPassword({ email: data.email, password: data.password })
     ).pipe(
       switchMap(({ data: authData, error }) => {
         if (error || !authData.session) {
+          this.authStateChangeLock = false;
           throw { status: 401, error: { error: 'Email ou senha inválidos' } };
         }
         const session = authData.session;
@@ -93,6 +98,7 @@ export class AuthService {
         ).pipe(
           map((userData) => {
             this.setSession({ token: session.access_token, user: userData });
+            this.authStateChangeLock = false;
             return { token: session.access_token, user: userData };
           })
         );
@@ -101,6 +107,7 @@ export class AuthService {
   }
 
   public register(data: RegisterData): Observable<AuthResponse> {
+    this.authStateChangeLock = true;
     const supabase = getSupabaseClient();
     return from(
       supabase.auth.signUp({
@@ -116,12 +123,14 @@ export class AuthService {
     ).pipe(
       switchMap(({ data: authData, error }) => {
         if (error) {
+          this.authStateChangeLock = false;
           if (error.message.includes('already')) {
             throw { status: 409, error: { error: 'Email já cadastrado' } };
           }
           throw { status: 400, error: { error: error.message } };
         }
         if (!authData.session || !authData.user) {
+          this.authStateChangeLock = false;
           throw { status: 500, error: { error: 'Erro ao criar conta' } };
         }
         const session = authData.session;
@@ -130,6 +139,7 @@ export class AuthService {
         ).pipe(
           map((userData) => {
             this.setSession({ token: session.access_token, user: userData });
+            this.authStateChangeLock = false;
             return { token: session.access_token, user: userData };
           })
         );
@@ -260,15 +270,21 @@ export class AuthService {
 
   private async fetchProfile(userId: string, email: string): Promise<UserData> {
     const supabase = getSupabaseClient();
-    const { data: profile } = await supabase
+    const { data: profile, error } = await supabase
       .from('profiles')
       .select('*')
       .eq('id', userId)
       .single();
 
+    if (error) {
+      console.error('[AuthService] Error fetching profile:', error);
+    }
+
     if (profile) {
       return mapProfileToUserData(profile as unknown as ProfileRow);
     }
+
+    console.warn('[AuthService] Profile not found for', email, '- using fallback data');
     return this.buildUserData({ id: userId, email });
   }
 
